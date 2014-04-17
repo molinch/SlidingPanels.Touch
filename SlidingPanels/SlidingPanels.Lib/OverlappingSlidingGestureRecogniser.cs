@@ -31,6 +31,13 @@ namespace SlidingPanels.Lib
 			base.TouchesBegan(touches, evt);
 			if (CurrentActivePanelContainer == null)
 				return;
+
+			if (CurrentActivePanelContainer.View.Frame.X > 0) {
+				CurrentActivePanelContainer.View.Frame = new RectangleF(
+					new PointF(CurrentActivePanelContainer.View.Frame.Width, 0),
+					CurrentActivePanelContainer.View.Frame.Size
+				);
+			}
 			CurrentActivePanelContainer.View.Superview.BringSubviewToFront(CurrentActivePanelContainer.View);
 		}
 
