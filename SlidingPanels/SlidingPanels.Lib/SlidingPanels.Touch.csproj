@@ -18,6 +18,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -25,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -36,6 +38,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="PanelContainers\" />
+    <Folder Include="Tools\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
@@ -47,5 +50,11 @@
     <Compile Include="SlidingPanelsNavigationViewController.cs" />
     <Compile Include="PanelContainers\PanelType.cs" />
     <Compile Include="SlidingGestureEventArgs.cs" />
+    <Compile Include="OverlappingSlidingGestureRecogniser.cs" />
+    <Compile Include="PanelContainers\OverlappingRightPanelContainer.cs" />
+    <Compile Include="PanelContainers\BlurryRightPanelContainer.cs" />
+    <Compile Include="Tools\UIImageEffects.cs" />
+    <Compile Include="Tools\UIViewExtensions.cs" />
+    <Compile Include="OverlappingSlidingNavigationController.cs" />
   </ItemGroup>
 </Project>
