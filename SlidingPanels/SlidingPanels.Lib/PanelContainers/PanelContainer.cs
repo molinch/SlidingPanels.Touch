@@ -37,7 +37,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <summary>
         /// Designates the edge tolerance in pts.  This defaults to 40 pts.
         /// </summary>
-        private float _edgeTolerance = 40F;
+		private float _edgeTolerance = 40F;
 
         #endregion
 
@@ -207,7 +207,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         public virtual void Show ()
         {
-            View.Layer.ZPosition = -1;
+			View.Layer.ZPosition = -1;
             View.Hidden = false;
         }
 

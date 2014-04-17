@@ -38,7 +38,10 @@ namespace SlidingPanels.Lib
 		/// <summary>
 		/// The list of panels that need to be monitored for gestures
 		/// </summary>
-		private List<PanelContainer> _panelContainers;
+		protected List<PanelContainer> PanelContainers {
+			get;
+			set;
+		}
 
 		#endregion
 
@@ -87,7 +90,7 @@ namespace SlidingPanels.Lib
 		public SlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController)
 		{
 			SlidingController = slidingController;
-			_panelContainers = panelContainers;
+			PanelContainers = panelContainers;
 
 			this.ShouldReceiveTouch += (sender, touch) => {
 				if (SlidingController == null) 
@@ -138,10 +141,10 @@ namespace SlidingPanels.Lib
 				return;
 			}
 
-			CurrentActivePanelContainer = _panelContainers.FirstOrDefault (p => p.IsVisible);
+			CurrentActivePanelContainer = PanelContainers.FirstOrDefault (p => p.IsVisible);
 			if (CurrentActivePanelContainer == null) 
 			{
-				CurrentActivePanelContainer = _panelContainers.FirstOrDefault (p => p.CanStartSliding (touchPt, SlidingController.View.Frame));
+				CurrentActivePanelContainer = PanelContainers.FirstOrDefault (p => p.CanStartSliding (touchPt, SlidingController.View.Frame));
 				if (CurrentActivePanelContainer != null) 
 				{
 					CurrentActivePanelContainer.Show ();

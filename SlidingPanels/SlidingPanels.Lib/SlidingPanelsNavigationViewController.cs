@@ -38,7 +38,7 @@ namespace SlidingPanels.Lib
         /// <summary>
         ///     How fast do we show/hide panels.
         /// </summary>
-        private const float AnimationSpeed = 0.25f;
+		protected const float AnimationSpeed = 0.25f;
 
         #endregion
 
@@ -50,12 +50,12 @@ namespace SlidingPanels.Lib
         ///     need to wait until View.SuperView is not null to start adding them.
         ///     We do that in the first time ViewWillAppear gets called.
         /// </summary>
-        private bool _firstTime = true;
+		protected bool _firstTime = true;
 
         /// <summary>
         ///     The list of panels.
         /// </summary>
-        private List<PanelContainer> _panelContainers;
+		protected List<PanelContainer> _panelContainers;
 
         /// <summary>
         ///     The sliding gesture  is  always enabled.  By default it will ignore
@@ -63,13 +63,13 @@ namespace SlidingPanels.Lib
         ///     prevent a gesture by providing an Action method.
         ///     <see cref="CanSwipeToShowPanel" />
         /// </summary>
-        private SlidingGestureRecogniser _slidingGesture;
+		protected SlidingGestureRecogniser _slidingGesture;
 
         /// <summary>
         ///     The tap gesture is only enabled when  a panel is open.  Tapping the
         ///     visible (slided out) view will trigger the panel to close.
         /// </summary>
-        private UITapGestureRecognizer _tapToClose;
+		protected UITapGestureRecognizer _tapToClose;
 
         #endregion
 
@@ -136,12 +136,20 @@ namespace SlidingPanels.Lib
             _tapToClose = new UITapGestureRecognizer();
             _tapToClose.AddTarget(() => HidePanel(CurrentActivePanelContainer));
 
-            _slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this);
-
-            _slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
-
-            _slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
+			_slidingGesture = CreateGestureRecogniser();
         }
+
+		/// <summary>
+		/// Creates the gesture recogniser. This is in a separate method for easier overriding.
+		/// </summary>
+		/// <returns>The gesture recogniser.</returns>
+		protected virtual SlidingGestureRecogniser CreateGestureRecogniser()
+		{
+			var slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this);
+			slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
+			slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
+			return _slidingGesture;
+		}
 
         /// <summary>
         ///     Called by the SlidingGestureRecogniser everytime a gesture is about
@@ -151,7 +159,7 @@ namespace SlidingPanels.Lib
         /// <returns><c>true</c>, if receive touch was shoulded, <c>false</c> otherwise.</returns>
         /// <param name="sender">Sender.</param>
         /// <param name="touch">Touch.</param>
-        private bool ShouldReceiveTouch(UIGestureRecognizer sender, UITouch touch)
+		protected bool ShouldReceiveTouch(UIGestureRecognizer sender, UITouch touch)
         {
             if (CanSwipeToShowPanel != null)
             {
@@ -222,7 +230,7 @@ namespace SlidingPanels.Lib
         /// </summary>
         /// <returns>The container for type.</returns>
         /// <param name="type">Type.</param>
-        private PanelContainer ExistingContainerForType(PanelType type)
+		protected PanelContainer ExistingContainerForType(PanelType type)
         {
             PanelContainer container = _panelContainers.FirstOrDefault(p => p.PanelType == type);
             if (container == null)
@@ -236,7 +244,7 @@ namespace SlidingPanels.Lib
         ///     Removes the panel.
         /// </summary>
         /// <param name="container">Container.</param>
-        public void RemovePanel(PanelContainer container)
+		public virtual void RemovePanel(PanelContainer container)
         {
             container.View.RemoveFromSuperview();
             container.RemoveFromParentViewController();
@@ -247,7 +255,7 @@ namespace SlidingPanels.Lib
         ///     Toggles the panel.
         /// </summary>
         /// <param name="type">Type.</param>
-        public void TogglePanel(PanelType type)
+		public virtual void TogglePanel(PanelType type)
         {
             PanelContainer container = ExistingContainerForType(type);
             if (container.IsVisible)
@@ -266,7 +274,7 @@ namespace SlidingPanels.Lib
             }
         }
 
-        public bool IsPanelVisible(PanelType type)
+		public virtual bool IsPanelVisible(PanelType type)
         {
             return CurrentActivePanelContainer != null && CurrentActivePanelContainer == ExistingContainerForType(type);
         }
@@ -277,7 +285,7 @@ namespace SlidingPanels.Lib
         ///     point we are guarantee that Superview is not null.
         /// </summary>
         /// <param name="container">Container.</param>
-        public void InsertPanel(PanelContainer container)
+		public virtual void InsertPanel(PanelContainer container)
         {
             _panelContainers.Add(container);
 
@@ -295,7 +303,7 @@ namespace SlidingPanels.Lib
         ///     Shows the panel.
         /// </summary>
         /// <param name="container">Container.</param>
-        public void ShowPanel(PanelContainer container)
+		public virtual void ShowPanel(PanelContainer container)
         {
             container.ViewWillAppear(true);
             container.Show();
@@ -313,7 +321,7 @@ namespace SlidingPanels.Lib
         ///     Hides the panel.
         /// </summary>
         /// <param name="container">Container.</param>
-        public void HidePanel(PanelContainer container)
+		public virtual void HidePanel(PanelContainer container)
         {
             container.ViewWillDisappear(true);
 
@@ -331,7 +339,7 @@ namespace SlidingPanels.Lib
         ///     Hides the panel.
         /// </summary>
         /// <param name="panelType">Type of the panel to hide.</param>
-        public void HidePanel(PanelType panelType)
+		public virtual void HidePanel(PanelType panelType)
         {
             PanelContainer container = ExistingContainerForType(panelType);
             if (container != null && container.IsVisible)

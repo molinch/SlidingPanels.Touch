@@ -35,12 +35,12 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <summary>
 		/// starting X Coordinate of the top view
 		/// </summary>
-		private float _topViewStartXPosition = 0.0f;
+		protected float _topViewStartXPosition = 0.0f;
 
 		/// <summary>
 		/// X coordinate where the user touched when starting a slide operation
 		/// </summary>
-		private float _touchPositionStartXPosition = 0.0f;
+		protected float _touchPositionStartXPosition = 0.0f;
 
 		/// <summary>
 		/// Gets the panel position.
