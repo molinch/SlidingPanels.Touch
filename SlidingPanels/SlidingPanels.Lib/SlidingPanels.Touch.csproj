@@ -51,10 +51,8 @@
     <Compile Include="SlidingPanelsNavigationViewController.cs" />
     <Compile Include="PanelContainers\PanelType.cs" />
     <Compile Include="SlidingGestureEventArgs.cs" />
-    <Compile Include="OverlappingSlidingGestureRecogniser.cs" />
     <Compile Include="Tools\UIImageEffects.cs" />
     <Compile Include="Tools\UIViewExtensions.cs" />
-    <Compile Include="OverlappingSlidingNavigationController.cs" />
     <Compile Include="Layouts\ISlidingLayout.cs" />
     <Compile Include="Layouts\ShiftingLayout.cs" />
     <Compile Include="Layouts\OverlappingLayout.cs" />
