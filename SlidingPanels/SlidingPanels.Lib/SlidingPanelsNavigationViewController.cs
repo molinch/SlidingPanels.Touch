@@ -25,6 +25,7 @@ using System.Linq;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib.PanelContainers;
+using System.Drawing;
 
 namespace SlidingPanels.Lib
 {
@@ -81,12 +82,6 @@ namespace SlidingPanels.Lib
         /// </summary>
         public Predicate<UITouch> CanSwipeToShowPanel;
 
-        public float ShadowRadius
-        {
-            get { return View.Layer.ShadowRadius; }
-            set { View.Layer.ShadowRadius = value; }
-        }
-
         public CGColor ShadowColor { get { return View.Layer.ShadowColor; } set { View.Layer.ShadowColor = value; } }
 
         public float ShadowOpacity { get { return View.Layer.ShadowOpacity; } set { View.Layer.ShadowOpacity = value; } }
@@ -115,9 +110,9 @@ namespace SlidingPanels.Lib
 				InteractivePopGestureRecognizer.Enabled = false;
 			}
 
-            ShadowRadius = 5;
-            ShadowColor = UIColor.Black.CGColor;
-            ShadowOpacity = .75f;
+			ShadowColor = UIColor.Black.CGColor;
+			ShadowOpacity = .75f;
+
         }
 
         #endregion
@@ -137,7 +132,16 @@ namespace SlidingPanels.Lib
             _tapToClose.AddTarget(() => HidePanel(CurrentActivePanelContainer));
 
 			_slidingGesture = CreateGestureRecogniser();
-        }
+
+			View.ClipsToBounds = true;
+			View.Layer.ShadowColor = ShadowColor;
+			View.Layer.MasksToBounds = false;
+			View.Layer.ShadowOpacity = ShadowOpacity;
+
+			RectangleF shadow = View.Bounds;
+			shadow.Inflate(new SizeF(3,3));
+			View.Layer.ShadowPath = UIBezierPath.FromRoundedRect(shadow, 0).CGPath;
+		}
 
 		/// <summary>
 		/// Creates the gesture recogniser. This is in a separate method for easier overriding.
@@ -145,7 +149,7 @@ namespace SlidingPanels.Lib
 		/// <returns>The gesture recogniser.</returns>
 		protected virtual SlidingGestureRecogniser CreateGestureRecogniser()
 		{
-			var slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this);
+			var slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this, View);
 			slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
 			slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
 			return _slidingGesture;

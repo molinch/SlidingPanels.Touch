@@ -14,7 +14,7 @@ namespace SlidingPanels.Lib
 
 		protected override SlidingGestureRecogniser CreateGestureRecogniser()
 		{
-			var slidingGesture = new OverlappingSlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this);
+			var slidingGesture = new OverlappingSlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this, View);
 			slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
 			slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
 			return slidingGesture;

@@ -15,8 +15,8 @@ namespace SlidingPanels.Lib
 		/// <param name="panelContainers">List of Panel Containers to monitor for gestures</param>
 		/// <param name="shouldReceiveTouch">Indicates that touch events should be monitored</param>
 		/// <param name="slidingController">The Sliding Panels controller</param>
-		public OverlappingSlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController)
-			: base(panelContainers, shouldReceiveTouch, slidingController)
+		public OverlappingSlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController, UIView contentView)
+			: base(panelContainers, shouldReceiveTouch, slidingController, contentView)
 		{
 
 		}

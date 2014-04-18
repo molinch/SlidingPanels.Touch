@@ -87,7 +87,7 @@ namespace SlidingPanels.Lib
 		/// <param name="panelContainers">List of Panel Containers to monitor for gestures</param>
 		/// <param name="shouldReceiveTouch">Indicates that touch events should be monitored</param>
 		/// <param name="slidingController">The Sliding Panels controller</param>
-		public SlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController)
+		public SlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController, UIView contentView)
 		{
 			SlidingController = slidingController;
 			PanelContainers = panelContainers;
@@ -102,6 +102,27 @@ namespace SlidingPanels.Lib
 				{ 
 					return false; 
 				}
+					
+				// FMT: if the displayed view covers the whole screen then this test should probably be skipped
+				// waiting for Pat answers on this: https://github.com/patbonecrusher/SlidingPanels.Touch/issues/6
+				// until then this is commented
+				/*
+				bool validTouch = false;
+				UIView touchView = touch.View;
+				while (touchView != null)
+				{
+					if (touchView == contentView)
+					{
+						validTouch = true;
+						break;
+					}
+					touchView = touchView.Superview;
+				}
+				if (!validTouch)
+				{
+					return false;
+				}
+				*/
 
 				return shouldReceiveTouch(sender, touch);
 			};
