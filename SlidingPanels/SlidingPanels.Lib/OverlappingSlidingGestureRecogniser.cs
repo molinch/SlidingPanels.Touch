@@ -7,6 +7,7 @@ using System.Drawing;
 
 namespace SlidingPanels.Lib
 {
+	/*
 	public class OverlappingSlidingGestureRecogniser: SlidingGestureRecogniser
 	{
 		/// <summary>
@@ -64,6 +65,6 @@ namespace SlidingPanels.Lib
 			RectangleF newFrame = CurrentActivePanelContainer.Sliding(touchPt, SlidingController.View.Frame);
 			CurrentActivePanelContainer.View.Frame = newFrame;
 		}
-	}
+	}*/
 }
 

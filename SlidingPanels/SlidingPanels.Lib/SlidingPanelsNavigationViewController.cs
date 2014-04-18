@@ -26,6 +26,7 @@ using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib.PanelContainers;
 using System.Drawing;
+using SlidingPanels.Lib.Layouts;
 
 namespace SlidingPanels.Lib
 {
@@ -34,16 +35,9 @@ namespace SlidingPanels.Lib
     /// </summary>
     public class SlidingPanelsNavigationViewController : UINavigationController
     {
-        #region Constants
-
-        /// <summary>
-        ///     How fast do we show/hide panels.
-        /// </summary>
-		protected const float AnimationSpeed = 0.25f;
-
-        #endregion
-
         #region Data Members
+
+		private readonly ISlidingLayout layout;
 
         /// <summary>
         ///     This is to work around an issue.  Since the panels are added to the
@@ -99,11 +93,13 @@ namespace SlidingPanels.Lib
 
         #region Construction/Destruction
 
+		private bool readyForViewDidLoad = false;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="SlidingPanels.Lib.SlidingPanelsNavigationViewController" /> class.
         /// </summary>
         /// <param name="controller">First controller to put on the stack.</param>
-        public SlidingPanelsNavigationViewController(UIViewController controller) : base(controller)
+		public SlidingPanelsNavigationViewController(UIViewController controller, ISlidingLayout layout) : base(controller)
         {
 			if (UIDevice.CurrentDevice.CheckSystemVersion (6, 0)) 
 			{
@@ -112,7 +108,10 @@ namespace SlidingPanels.Lib
 
 			ShadowColor = UIColor.Black.CGColor;
 			ShadowOpacity = .75f;
+			this.layout = layout;
 
+			readyForViewDidLoad = true;
+			ViewDidLoad();
         }
 
         #endregion
@@ -125,6 +124,9 @@ namespace SlidingPanels.Lib
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+			if (!readyForViewDidLoad)
+				return;
 
             _panelContainers = new List<PanelContainer>();
 
@@ -149,10 +151,10 @@ namespace SlidingPanels.Lib
 		/// <returns>The gesture recogniser.</returns>
 		protected virtual SlidingGestureRecogniser CreateGestureRecogniser()
 		{
-			var slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this, View);
+			var slidingGesture = new SlidingGestureRecogniser(_panelContainers, ShouldReceiveTouch, this, View, layout);
 			slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
 			slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
-			return _slidingGesture;
+			return slidingGesture;
 		}
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace SlidingPanels.Lib
         /// <returns><c>true</c>, if receive touch was shoulded, <c>false</c> otherwise.</returns>
         /// <param name="sender">Sender.</param>
         /// <param name="touch">Touch.</param>
-		protected bool ShouldReceiveTouch(UIGestureRecognizer sender, UITouch touch)
+		public bool ShouldReceiveTouch(UIGestureRecognizer sender, UITouch touch)
         {
             if (CanSwipeToShowPanel != null)
             {
@@ -301,6 +303,8 @@ namespace SlidingPanels.Lib
                 View.RemoveFromSuperview();
                 parent.AddSubview(View);
             }
+
+			layout.WhenPanelInserted(this, container);
         }
 
         /// <summary>
@@ -311,14 +315,10 @@ namespace SlidingPanels.Lib
         {
             container.ViewWillAppear(true);
             container.Show();
-
-            UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
-                delegate { View.Frame = container.GetTopViewPositionWhenSliderIsVisible(View.Frame); },
-                delegate
-                {
-                    View.AddGestureRecognizer(_tapToClose);
-                    container.ViewDidAppear(true);
-                });
+			layout.CompleteShowPanel(this, container, () => {
+				View.AddGestureRecognizer(_tapToClose);
+				container.ViewDidAppear(true);
+			});
         }
 
         /// <summary>
@@ -328,15 +328,11 @@ namespace SlidingPanels.Lib
 		public virtual void HidePanel(PanelContainer container)
         {
             container.ViewWillDisappear(true);
-
-            UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
-                delegate { View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame); },
-                delegate
-                {
-                    View.RemoveGestureRecognizer(_tapToClose);
-                    container.Hide();
-                    container.ViewDidDisappear(true);
-                });
+			layout.CompleteHidePanel(this, container, () => {
+                View.RemoveGestureRecognizer(_tapToClose);
+                container.Hide();
+                container.ViewDidDisappear(true);
+            });
         }
 
         /// <summary>

@@ -33,28 +33,40 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
-    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="PanelContainers\" />
     <Folder Include="Tools\" />
+    <Folder Include="Layouts\" />
+    <Folder Include="TransitionEffects\" />
+    <Folder Include="TransitionLogic\" />
+    <Folder Include="TransitionLogic\Overlap\" />
+    <Folder Include="TransitionLogic\Shift\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <Compile Include="PanelContainers\PanelContainer.cs" />
-    <Compile Include="PanelContainers\LeftPanelContainer.cs" />
-    <Compile Include="PanelContainers\RightPanelContainer.cs" />
     <Compile Include="SlidingGestureRecogniser.cs" />
-    <Compile Include="PanelContainers\BottomPanelContainer.cs" />
     <Compile Include="SlidingPanelsNavigationViewController.cs" />
     <Compile Include="PanelContainers\PanelType.cs" />
     <Compile Include="SlidingGestureEventArgs.cs" />
     <Compile Include="OverlappingSlidingGestureRecogniser.cs" />
-    <Compile Include="PanelContainers\OverlappingRightPanelContainer.cs" />
-    <Compile Include="PanelContainers\BlurryRightPanelContainer.cs" />
     <Compile Include="Tools\UIImageEffects.cs" />
     <Compile Include="Tools\UIViewExtensions.cs" />
     <Compile Include="OverlappingSlidingNavigationController.cs" />
+    <Compile Include="Layouts\ISlidingLayout.cs" />
+    <Compile Include="Layouts\ShiftingLayout.cs" />
+    <Compile Include="Layouts\OverlappingLayout.cs" />
+    <Compile Include="TransitionEffects\BlurryContainer.cs" />
+    <Compile Include="TransitionEffects\IPanelContainerWithEffect.cs" />
+    <Compile Include="TransitionLogic\PanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Shift\ShiftBottomPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Shift\ShiftLeftPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Shift\ShiftPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Shift\ShiftRightPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Overlap\OverlapPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Overlap\OverlapRightPanelContainerTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\EffectTransitionLogic.cs" />
   </ItemGroup>
 </Project>

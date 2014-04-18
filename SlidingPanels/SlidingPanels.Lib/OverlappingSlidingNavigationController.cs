@@ -7,6 +7,7 @@ using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib
 {
+	/*
 	public class OverlappingSlidingNavigationController : SlidingPanelsNavigationViewController
 	{
 		public OverlappingSlidingNavigationController(UIViewController controller) : base(controller) {
@@ -18,25 +19,6 @@ namespace SlidingPanels.Lib
 			slidingGesture.ShowPanel += (sender, e) => ShowPanel(((SlidingGestureEventArgs) e).PanelContainer);
 			slidingGesture.HidePanel += (sender, e) => HidePanel(((SlidingGestureEventArgs) e).PanelContainer);
 			return slidingGesture;
-		}
-
-		public override void HidePanel (PanelContainer container)
-		{
-			container.ViewWillDisappear(true);
-
-			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
-				delegate {
-					container.View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame);
-				},
-				delegate
-				{
-					if (container.View.Superview != null) {
-						container.View.Superview.SendSubviewToBack(container.View);
-					}
-					View.RemoveGestureRecognizer(_tapToClose);
-					container.Hide();
-					container.ViewDidDisappear(true);
-				});
 		}
 
 		/// <summary>
@@ -69,6 +51,27 @@ namespace SlidingPanels.Lib
 					container.ViewDidAppear(true);
 				});
 		}
-	}
+
+		public override void HidePanel (PanelContainer container)
+		{
+			container.ViewWillDisappear(true);
+
+			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
+				delegate {
+					container.View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame);
+				},
+				delegate
+				{
+					if (container.View.Superview != null) {
+						container.View.Superview.SendSubviewToBack(container.View);
+					}
+					View.RemoveGestureRecognizer(_tapToClose);
+					container.Hide();
+					container.ViewDidDisappear(true);
+				});
+		}
+
+
+	}*/
 }
 

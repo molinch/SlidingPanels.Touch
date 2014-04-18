@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using SlidingPanels.Lib.PanelContainers;
 using System.Linq;
 using System.Drawing;
+using SlidingPanels.Lib.Layouts;
 
 namespace SlidingPanels.Lib
 {
@@ -34,6 +35,8 @@ namespace SlidingPanels.Lib
 	public class SlidingGestureRecogniser : UIPanGestureRecognizer
 	{
 		#region Data Members
+
+		private readonly ISlidingLayout layout;
 
 		/// <summary>
 		/// The list of panels that need to be monitored for gestures
@@ -87,8 +90,9 @@ namespace SlidingPanels.Lib
 		/// <param name="panelContainers">List of Panel Containers to monitor for gestures</param>
 		/// <param name="shouldReceiveTouch">Indicates that touch events should be monitored</param>
 		/// <param name="slidingController">The Sliding Panels controller</param>
-		public SlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController, UIView contentView)
+		public SlidingGestureRecogniser (List<PanelContainer> panelContainers, UITouchEventArgs shouldReceiveTouch, UIViewController slidingController, UIView contentView, ISlidingLayout layout)
 		{
+			this.layout = layout;
 			SlidingController = slidingController;
 			PanelContainers = panelContainers;
 
@@ -180,6 +184,8 @@ namespace SlidingPanels.Lib
 			{
 				CurrentActivePanelContainer.SlidingStarted (touchPt, SlidingController.View.Frame);
 			}
+
+			layout.SlidingGestureBegan(SlidingController, CurrentActivePanelContainer, touchPt);
 		}
 
 		/// <summary>
@@ -207,8 +213,7 @@ namespace SlidingPanels.Lib
 				return;
 			}
 
-			RectangleF newFrame = CurrentActivePanelContainer.Sliding (touchPt, SlidingController.View.Frame);
-			SlidingController.View.Frame = newFrame;
+			layout.SlidingGestureMoved(SlidingController, CurrentActivePanelContainer, touchPt);
 		}
 
 		/// <summary>
@@ -250,6 +255,8 @@ namespace SlidingPanels.Lib
 					HidePanel (this, new SlidingGestureEventArgs (CurrentActivePanelContainer));
 				}
 			}
+
+			layout.SlidingGestureEnded(SlidingController, CurrentActivePanelContainer, touchPt);
 		}
 
 		/// <summary>

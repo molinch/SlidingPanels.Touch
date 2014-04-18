@@ -22,6 +22,9 @@
 using System;
 using MonoTouch.UIKit;
 using System.Drawing;
+using SlidingPanels.Lib.Layouts;
+using SlidingPanels.Lib.TransitionLogic;
+using SlidingPanels.Lib.TransitionEffects;
 
 namespace SlidingPanels.Lib.PanelContainers
 {
@@ -29,19 +32,19 @@ namespace SlidingPanels.Lib.PanelContainers
     /// Base class for Left, Right or Bottom Panel Containers
     /// This is an abstract class and cannot be used directly
     /// </summary>
-    public abstract class PanelContainer : UIViewController
+    public class PanelContainer : UIViewController
     {
+		#region Properties
 
-        #region Constants
+		protected ISlidingLayout Layout {
+			get;
+			private set;
+		}
 
-        /// <summary>
-        /// Designates the edge tolerance in pts.  This defaults to 40 pts.
-        /// </summary>
-		private float _edgeTolerance = 40F;
-
-        #endregion
-
-        #region Properties
+		public PanelContainerTransitionLogic TransitionLogic {
+			get;
+			private set;
+		}
 
         /// <summary>
         /// Gets the view controller contained inside this panel
@@ -87,12 +90,18 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <value>The edge tolerance.</value>
         public virtual float EdgeTolerance {
             get {
-                return _edgeTolerance;
+				return TransitionLogic.EdgeTolerance;
             }
             set {
-                _edgeTolerance = value;
+				TransitionLogic.EdgeTolerance = value;
             }
         }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this PanelContainer is allowed to slide.
+		/// </summary>
+		/// <value><c>true</c> if sliding is allowed; otherwise, <c>false</c>.</value>
+		public bool SlidingAllowed { get; set; }
 
         #endregion
 
@@ -103,12 +112,20 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         /// <param name="panel">Panel.</param>
         /// <param name="panelType">Panel type.</param>
-        protected PanelContainer (UIViewController panel, PanelType panelType)
+		public PanelContainer (ISlidingLayout layout, UIViewController panel, PanelType panelType,
+			Func<PanelContainer, IPanelContainerWithEffect> optionalEffect = null)
         {
+			Layout = layout;
+
+			TransitionLogic = layout.CreateTransitionLogic(panelType);
+			if (optionalEffect != null) {
+				TransitionLogic = new EffectTransitionLogic(TransitionLogic, optionalEffect(this));
+			}
+
             PanelVC = panel;
             PanelType = panelType;
-
             Size = panel.View.Frame.Size;
+			SlidingAllowed = true;
         }
 
         #endregion
@@ -128,6 +145,7 @@ namespace SlidingPanels.Lib.PanelContainers
             View.AddSubview (PanelVC.View);
 
             Hide ();
+			PanelVC.View.Frame = TransitionLogic.GetPanelPosition(View, Size);
         }
 
         /// <summary>
@@ -136,24 +154,10 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <param name="animated">If set to <c>true</c> animated.</param>
         public override void ViewWillAppear (bool animated)
         {
-            RectangleF frame = UIScreen.MainScreen.Bounds;
-
-            if (InterfaceOrientation != UIInterfaceOrientation.Portrait) {
-                frame.Width = UIScreen.MainScreen.Bounds.Height;
-                frame.Height = UIScreen.MainScreen.ApplicationFrame.Width;
-                frame.X = UIScreen.MainScreen.ApplicationFrame.Y;
-
-                if (UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeLeft) {
-                    frame.Y = UIScreen.MainScreen.ApplicationFrame.X;
-                } else {
-                    frame.Y = UIScreen.MainScreen.Bounds.Width - UIScreen.MainScreen.ApplicationFrame.Width;
-                }
-
-            }
-
-            View.Frame = frame;
+			Layout.WhenPanelStartsShowing(this, InterfaceOrientation);
             PanelVC.ViewWillAppear (animated);
             base.ViewWillAppear (animated);
+			PanelVC.View.Frame = TransitionLogic.GetPanelPosition(View, Size);
         }
 
         /// <summary>
@@ -207,8 +211,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         public virtual void Show ()
         {
-			View.Layer.ZPosition = -1;
-            View.Hidden = false;
+			TransitionLogic.Show(View);
         }
 
         /// <summary>
@@ -216,52 +219,84 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         public virtual void Hide ()
         {
-            View.Hidden = true;
+			TransitionLogic.Hide(View);
         }
+
+		public virtual bool CanStartSliding(PointF touchPosition, RectangleF topViewCurrentFrame) {
+			if (!SlidingAllowed)
+				return false;
+
+			if (IsVisible)
+				return topViewCurrentFrame.Contains(touchPosition);
+
+			return TransitionLogic.SlidingAllowed(touchPosition, topViewCurrentFrame, View, Size);
+		}
 
         #endregion
 
-        #region Abstract Method definitions
+		#region Position Methods
 
-        /// <summary>
-        /// Returns a rectangle representing the location and size of the top view 
-        /// when this Panel is showing
-        /// </summary>
-        /// <returns>The top view position when slider is visible.</returns>
-        /// <param name="topViewCurrentFrame">Top view current frame.</param>
-        public abstract RectangleF GetTopViewPositionWhenSliderIsVisible (RectangleF topViewCurrentFrame);
+		/// <summary>
+		/// Returns a rectangle representing the location and size of the top view 
+		/// when this Panel is hidden
+		/// </summary>
+		/// <returns>The top view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF topViewCurrentFrame) {
+			return TransitionLogic.GetTopViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
+		}
 
-        /// <summary>
-        /// Returns a rectangle representing the location and size of the top view 
-        /// when this Panel is hidden
-        /// </summary>
-        /// <returns>The top view position when slider is visible.</returns>
-        /// <param name="topViewCurrentFrame">Top view current frame.</param>
-        public abstract RectangleF GetTopViewPositionWhenSliderIsHidden (RectangleF topViewCurrentFrame);
+		/// <summary>
+		/// Returns a rectangle representing the location and size of the top view 
+		/// when this Panel is showing
+		/// </summary>
+		/// <returns>The top view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame) {
+			return TransitionLogic.GetTopViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
+		}
 
-        /// <summary>
-        /// Determines whether this instance can start sliding given the touch position and the 
-        /// current location/size of the top view. 
-        /// Note that touchPosition is in Screen coordinate.
-        /// </summary>
-        /// <returns><c>true</c> if this instance can start sliding otherwise, <c>false</c>.</returns>
-        /// <param name="touchPosition">Touch position.</param>
-        /// <param name="topViewCurrentFrame">Top view's current frame.</param>
-        public abstract bool CanStartSliding (PointF touchPosition, RectangleF topViewCurrentFrame);
+		/// <summary>
+		/// Returns a rectangle representing the location and size of the container view 
+		/// when this Panel is showing
+		/// </summary>
+		/// <returns>The container view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public RectangleF GetContainerViewPositionWhenSliderIsHidden(RectangleF topViewCurrentFrame) {
+			return TransitionLogic.GetContainerViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
+		}
+
+		/// <summary>
+		/// Returns a rectangle representing the location and size of the container view 
+		/// when this Panel is hidden
+		/// </summary>
+		/// <returns>The container view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public RectangleF GetContainerViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame) {
+			return TransitionLogic.GetContainerViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
+		}
+
+		#endregion
+
+		#region Sliding Methods
 
         /// <summary>
         /// Called when sliding has started on this Panel
         /// </summary>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-        public abstract void SlidingStarted (PointF touchPosition, RectangleF topViewCurrentFrame);
+		public void SlidingStarted (PointF touchPosition, RectangleF topViewCurrentFrame) {
+			TransitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, View, Size);
+		}
 
         /// <summary>
         /// Called while the user is sliding this Panel
         /// </summary>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-        public abstract RectangleF Sliding (PointF touchPosition, RectangleF topViewCurrentFrame);
+		public RectangleF Sliding (PointF touchPosition, RectangleF topViewCurrentFrame) {
+			return TransitionLogic.Sliding(touchPosition, topViewCurrentFrame, View, Size);
+		}
 
         /// <summary>
         /// Determines if a slide is complete
@@ -269,7 +304,9 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <returns><c>true</c>, if sliding has ended, <c>false</c> otherwise.</returns>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-        public abstract bool SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame);
+		public bool SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame) {
+			return TransitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, View, Size);
+		}
 
         #endregion
 

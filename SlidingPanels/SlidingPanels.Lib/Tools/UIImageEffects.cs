@@ -1,6 +1,4 @@
 ﻿using System;
-
-using System;
 using MonoTouch.UIKit;
 using MonoTouch.Accelerate;
 using System.Diagnostics;
