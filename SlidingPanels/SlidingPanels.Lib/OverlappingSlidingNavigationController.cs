@@ -26,28 +26,42 @@ namespace SlidingPanels.Lib
 
 			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
 				delegate {
-					if (container.View.Superview == null)
-						return;
-					container.View.Superview.SendSubviewToBack(container.View);
+					container.View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame);
 				},
 				delegate
 				{
+					if (container.View.Superview != null) {
+						container.View.Superview.SendSubviewToBack(container.View);
+					}
 					View.RemoveGestureRecognizer(_tapToClose);
 					container.Hide();
 					container.ViewDidDisappear(true);
 				});
 		}
 
+		/// <summary>
+		///     Insert a panel in the view hierarchy.  If this is done early in
+		///     the creation process,  we postponed adding  until later, at one
+		///     point we are guarantee that Superview is not null.
+		/// </summary>
+		/// <param name="container">Container.</param>
+		public override void InsertPanel(PanelContainer container)
+		{
+			base.InsertPanel(container);
+			container.View.Frame = container.GetTopViewPositionWhenSliderIsHidden(View.Frame);
+		}
+
 		public override void ShowPanel (PanelContainer container)
 		{
-			container.ViewWillAppear(true);
+			//FMT: shouldn't do it otherwise it will screw our container frame
+			//container.ViewWillAppear(true);
 			container.Show();
-
+			if (container.View.Superview != null) {
+				container.View.Superview.BringSubviewToFront(container.View);
+			}
 			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
 				delegate {
-					if (container.View.Superview == null)
-						return;
-					container.View.Superview.BringSubviewToFront(container.View);
+					container.View.Frame = container.GetTopViewPositionWhenSliderIsVisible(View.Frame);
 				},
 				delegate
 				{

@@ -9,6 +9,7 @@ namespace SlidingPanels.Lib.PanelContainers
 {
 	public class BlurryRightPanelContainer: OverlappingRightPanelContainer
 	{
+		private UIView backgroundShifter;
 		private UIImageView blurryBackground;
 
 		/// <summary>
@@ -20,10 +21,49 @@ namespace SlidingPanels.Lib.PanelContainers
 		{
 		}
 
+		public override void ViewDidLoad()
+		{
+			base.ViewDidLoad();
+			View.ClipsToBounds = true;
+
+			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), View.Frame.Size));
+			View.Add(backgroundShifter);
+			backgroundShifter.Superview.SendSubviewToBack(backgroundShifter);
+		}
+
+		public override void Show()
+		{
+			base.Show();
+			GenerateTransluency();
+			backgroundShifter.Frame = new RectangleF(new PointF(0, 0), View.Frame.Size);
+		}
+
 		public override void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
 		{
 			base.SlidingStarted(touchPosition, topViewCurrentFrame);
+			GenerateTransluency();
+		}
 
+		/// <summary>
+		/// Called while the user is sliding this Panel
+		/// </summary>
+		/// <param name="touchPosition">Touch position.</param>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public override RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame)
+		{
+			var frame = base.Sliding(touchPosition, topViewCurrentFrame);
+
+			if (blurryBackground != null) {
+				backgroundShifter.Frame = new RectangleF(
+					0 - frame.X, 0, topViewCurrentFrame.Width, topViewCurrentFrame.Height
+				);
+			}
+
+			return frame;
+		}
+
+		private void GenerateTransluency()
+		{
 			var displayedController = CurrentController;
 			if (displayedController == null)
 				return;
@@ -35,18 +75,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			}
 			blurryBackground = new UIImageView(viewBackground.ApplyLightEffect());
 
-			View.Add(blurryBackground);
-			View.SendSubviewToBack(blurryBackground);
-		}
-
-		private UIViewController CurrentController
-		{
-			get
-			{
-				var window = UIApplication.SharedApplication.KeyWindow ?? UIApplication.SharedApplication.Windows[0];
-				var navController = window.RootViewController.ChildViewControllers[0];
-				return navController.ChildViewControllers.LastOrDefault();
-			}
+			backgroundShifter.Add(blurryBackground);
 		}
 	}
 }

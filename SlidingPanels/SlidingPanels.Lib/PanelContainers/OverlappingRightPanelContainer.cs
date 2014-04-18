@@ -17,10 +17,36 @@ namespace SlidingPanels.Lib.PanelContainers
 		}
 
 		/// <summary>
+		/// Returns a rectangle representing the location and size of the top view 
+		/// when this Panel is showing
+		/// </summary>
+		/// <returns>The top view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame)
+		{
+			topViewCurrentFrame.X = 0;
+			return topViewCurrentFrame;
+		}
+
+		/// <summary>
+		/// Returns a rectangle representing the location and size of the top view 
+		/// when this Panel is hidden
+		/// </summary>
+		/// <returns>The top view position when slider is visible.</returns>
+		/// <param name="topViewCurrentFrame">Top view current frame.</param>
+		public override RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF topViewCurrentFrame)
+		{
+			topViewCurrentFrame.X = Size.Width;
+			return topViewCurrentFrame;
+		}
+
+		/// <summary>
 		/// Makes this Panel visible
 		/// </summary>
 		public override void Show ()
 		{
+			if (View.Hidden)
+				View.Frame = new RectangleF(new PointF(CurrentController.View.Frame.Width, 0), View.Frame.Size);
 			View.Hidden = false;
 		}
 
@@ -64,9 +90,19 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame)
+		//public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame)
+		//{
+		//	return GetTopViewPositionWhenSliderIsHidden(topViewCurrentFrame);
+		//}
+
+		protected UIViewController CurrentController
 		{
-			return GetTopViewPositionWhenSliderIsHidden(topViewCurrentFrame);
+			get
+			{
+				var window = UIApplication.SharedApplication.KeyWindow ?? UIApplication.SharedApplication.Windows[0];
+				var navController = window.RootViewController.ChildViewControllers[0];
+				return navController.ChildViewControllers.LastOrDefault();
+			}
 		}
 	}
 }
