@@ -24,50 +24,55 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib;
+using Cirrious.FluentLayouts.Touch;
+using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Panels
 {
-	public partial class LeftPanelViewController : UIViewController
+	public class LeftPanelViewController : UIViewController
 	{
 		public SlidingPanelsNavigationViewController PanelsNavController {
 			get;
 			private set;
 		}
 
-		public LeftPanelViewController (SlidingPanelsNavigationViewController controller) : base ("LeftPanelViewController", null)
+		public LeftPanelViewController (SlidingPanelsNavigationViewController controller) : base ()
 		{
 			PanelsNavController = controller;
-		}
-
-		public override void DidReceiveMemoryWarning ()
-		{
-			// Releases the view if it doesn't have a superview.
-			base.DidReceiveMemoryWarning ();
-			
-			// Release any cached data, images, etc that aren't in use.
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
-			// Perform any additional setup after loading the view, typically from a nib.
-		}
+			View.BackgroundColor = UIColor.Green;
+			View.Frame = new RectangleF (View.Frame.Location, new SizeF (View.Frame.Width/2, View.Frame.Height));
 
-		public override void ViewWillAppear (bool animated)
-		{
-			base.ViewWillAppear (animated);
-		}
-		partial void ShowScreenA (MonoTouch.Foundation.NSObject sender)
-		{
-			PanelsNavController.PopToRootViewController(false);
-			PanelsNavController.TogglePanel(SlidingPanels.Lib.PanelContainers.PanelType.LeftPanel);
-		}
+			var buttonA = new UIButton (UIButtonType.System) {
 
-		partial void ShowScreenB (MonoTouch.Foundation.NSObject sender)
-		{
-			PanelsNavController.PushViewController(new ExampleContentB(), true);
-			PanelsNavController.TogglePanel(SlidingPanels.Lib.PanelContainers.PanelType.LeftPanel);
+			};
+			buttonA.SetTitle ("Screen A", UIControlState.Normal);
+			buttonA.TouchUpInside += (sender, e) => {
+				PanelsNavController.PopToRootViewController(false);
+				PanelsNavController.TogglePanel(PanelType.LeftPanel);
+			};
+
+			var buttonB = new UIButton (UIButtonType.System);
+			buttonB.SetTitle ("Screen B", UIControlState.Normal);
+			buttonB.TouchUpInside += (sender, e) => {
+				PanelsNavController.PushViewController(new ExampleContentB(), true);
+				PanelsNavController.TogglePanel(PanelType.LeftPanel);
+			};
+
+			View.AddSubviews (
+				buttonA,
+				buttonB
+			);
+
+			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
+			/*View.AddConstraints (
+				View.Width().EqualTo(200),
+				buttonB.Below(buttonA)
+			);*/
 		}
 	}
 }

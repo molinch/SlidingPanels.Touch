@@ -24,34 +24,29 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib;
+using Cirrious.FluentLayouts.Touch;
 
 namespace SlidingPanels.Panels
 {
-	public partial class RightPanelViewController : UIViewController
+	public class RightPanelViewController : UIViewController
 	{
 		public SlidingPanelsNavigationViewController PanelsNavController {
 			get;
 			private set;
 		}
 
-		public RightPanelViewController (SlidingPanelsNavigationViewController controller) : base ("RightPanelViewController", null)
+		public RightPanelViewController (SlidingPanelsNavigationViewController controller) : base()
 		{
 			PanelsNavController = controller;
-		}
-
-		public override void DidReceiveMemoryWarning ()
-		{
-			// Releases the view if it doesn't have a superview.
-			base.DidReceiveMemoryWarning ();
-			
-			// Release any cached data, images, etc that aren't in use.
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
-			// Perform any additional setup after loading the view, typically from a nib.
+
+			//View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
+			View.BackgroundColor = UIColor.Red;
+			View.Frame = new RectangleF (View.Frame.Location, new SizeF (View.Frame.Width/2, View.Frame.Height));
 		}
 	}
 }

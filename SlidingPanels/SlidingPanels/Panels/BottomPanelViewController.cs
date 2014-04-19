@@ -26,14 +26,14 @@ using System.Drawing;
 
 namespace SlidingPanels.Panels
 {
-	public partial class BottomPanelViewController : UIViewController
+	public class BottomPanelViewController : UIViewController
 	{
 		public SlidingPanelsNavigationViewController PanelsNavController {
 			get;
 			private set;
 		}
 
-		public BottomPanelViewController (SlidingPanelsNavigationViewController controller) : base ("BottomPanelViewController", null)
+		public BottomPanelViewController (SlidingPanelsNavigationViewController controller)
 		{
 			PanelsNavController = controller;
 		}
@@ -41,6 +41,7 @@ namespace SlidingPanels.Panels
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+			View.BackgroundColor = UIColor.Yellow;
 		}
 	}
 }

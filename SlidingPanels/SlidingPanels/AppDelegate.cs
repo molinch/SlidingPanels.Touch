@@ -27,6 +27,8 @@ using MonoTouch.UIKit;
 using SlidingPanels.Lib;
 using SlidingPanels.Lib.PanelContainers;
 using SlidingPanels.Panels;
+using SlidingPanels.Lib.Layouts;
+using SlidingPanels.Lib.TransitionEffects;
 
 namespace SlidingPanels
 {
@@ -49,19 +51,8 @@ namespace SlidingPanels
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
-
-			SlidingPanelsNavigationViewController navController = new SlidingPanelsNavigationViewController(new ExampleContentA ());
-
-			UIViewController rootController = new UIViewController ();
-			rootController.AddChildViewController (navController);
-			rootController.View.AddSubview (navController.View);
-
-			window.RootViewController = rootController;
+			LayoutSwitch.ApplyShifting (window);
 			window.MakeKeyAndVisible ();
-
-			navController.InsertPanel (new LeftPanelContainer(new LeftPanelViewController (navController)));
-			navController.InsertPanel (new RightPanelContainer(new RightPanelViewController (navController)));
-			navController.InsertPanel (new BottomPanelContainer(new BottomPanelViewController (navController)));
 
 			return true;
 		}

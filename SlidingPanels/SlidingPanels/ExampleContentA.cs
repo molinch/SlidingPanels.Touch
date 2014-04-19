@@ -26,66 +26,88 @@ using MonoTouch.UIKit;
 using SlidingPanels.Lib;
 using SlidingPanels.Lib.PanelContainers;
 using SlidingPanels.Panels;
+using Cirrious.FluentLayouts.Touch;
 
 namespace SlidingPanels
 {
-	public partial class ExampleContentA : UIViewController
+	public class ExampleContentA : UIViewController
 	{
-		static bool UserInterfaceIdiomIsPhone {
-			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
-		}
-
-		public ExampleContentA ()
-			: base (UserInterfaceIdiomIsPhone ? "ExampleContentA_iPhone" : "ExampleContentA_iPad", null)
+		public ExampleContentA (): base()
 		{
 			NavigationItem.LeftBarButtonItem = CreateSliderButton("Images/SlideRight40.png", PanelType.LeftPanel);
-			NavigationItem.RightBarButtonItem = CreateSliderButton("Images/SlideLeft40.png", PanelType.BottomPanel);
+			NavigationItem.RightBarButtonItem = CreateSliderButton("Images/SlideLeft40.png", PanelType.RightPanel);
 		}
 
 		private UIBarButtonItem CreateSliderButton(string imageName, PanelType panelType)
 		{
-			UIButton button = new UIButton(new RectangleF(0, 0, 40f, 40f));
+			var button = new UIButton(new RectangleF(0, 0, 40f, 40f));
 			button.SetBackgroundImage(UIImage.FromBundle(imageName), UIControlState.Normal);
 			button.TouchUpInside += delegate
 			{
-				SlidingPanelsNavigationViewController navController = NavigationController as SlidingPanelsNavigationViewController;
+				var navController = NavigationController as SlidingPanelsNavigationViewController;
 				navController.TogglePanel(panelType);
 			};
 
 			return new UIBarButtonItem(button);
 		}
 
-
-		public override void DidReceiveMemoryWarning ()
-		{
-			// Releases the view if it doesn't have a superview.
-			base.DidReceiveMemoryWarning ();
-
-			// Release any cached data, images, etc that aren't in use.
-		}
-
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 
-			SlidingPanelsNavigationViewController navController = NavigationController as SlidingPanelsNavigationViewController;
+			//var navController = NavigationController as SlidingPanelsNavigationViewController;
 
 			// Perform any additional setup after loading the view, typically from a nib.
-			LeftArrowImage.Image = UIImage.FromBundle("Images/LeftArrow.png");
-			UpArrowImage.Image = UIImage.FromBundle("Images/UpArrow.png");
-			RightArrowImage.Image = UIImage.FromBundle("Images/RightArrow.png");
+			//LeftArrowImage.Image = UIImage.FromBundle("Images/LeftArrow.png");
+			//UpArrowImage.Image = UIImage.FromBundle("Images/UpArrow.png");
+			//RightArrowImage.Image = UIImage.FromBundle("Images/RightArrow.png");
 
 			NavigationController.NavigationBar.TintColor = UIColor.Black;
-		}
+			View.BackgroundColor = UIColor.LightGray;
 
-		partial void DoIt (MonoTouch.Foundation.NSObject sender)
-		{
-			NavigationController.PushViewController(new ExampleContentB(), true);
-		}
+			var title = new UILabel () {
+				Text = "This is screen A",
+			};
+			title.Font = UIFont.FromDescriptor (title.Font.FontDescriptor, 14);
 
-		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
-		{
-			base.DidRotate (fromInterfaceOrientation);
+			var info = new UILabel () {
+				Text = "If you want to switch the layout choose one here:"
+			};
+
+			var window = UIApplication.SharedApplication.Windows[0];
+			var btnShift = new UIButton (UIButtonType.System);
+			btnShift.SetTitle ("Shifting", UIControlState.Normal);
+			btnShift.TouchUpInside += (sender, e) => LayoutSwitch.ApplyShifting(window);
+
+			var btnOverlapping = new UIButton (UIButtonType.System);
+			btnOverlapping.SetTitle ("Overlapping", UIControlState.Normal);
+			btnOverlapping.TouchUpInside += (sender, e) => LayoutSwitch.ApplyOverlapping(window);
+
+			var btnBlurry = new UIButton (UIButtonType.System);
+			btnBlurry.SetTitle ("Blurry", UIControlState.Normal);
+			btnBlurry.TouchUpInside += (sender, e) => LayoutSwitch.ApplyBlurry(window);
+
+			View.AddSubviews (
+				title,
+				info,
+				btnShift,
+				btnOverlapping,
+				btnBlurry
+			);
+
+			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
+			View.AddConstraints (
+				title.AtTopOf(View, 70),
+				title.WithSameCenterX(View),
+				info.WithSameCenterX(title),
+				info.Below(title, 5),
+				btnShift.Below(info, 5),
+				btnShift.WithSameCenterX(title),
+				btnOverlapping.Below(btnShift, 5),
+				btnOverlapping.WithSameCenterX(title),
+				btnBlurry.Below(btnOverlapping, 5),
+				btnBlurry.WithSameCenterX(title)
+			);
 		}
 	}
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EB99DC4A-6C39-4A37-8F85-452C2AC8F9BF}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,8 +41,10 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer: Pat Laplante (DKQ6G4NDKY)</CodesignKey>
-    <IpaPackageName />
-    <MtouchI18n />
+    <IpaPackageName>
+    </IpaPackageName>
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
@@ -52,7 +54,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchI18n />
+    <MtouchI18n>
+    </MtouchI18n>
     <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
@@ -79,6 +82,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
+    <Reference Include="Cirrious.FluentLayouts.Touch">
+      <HintPath>..\..\..\..\packages\Cirrious.FluentLayout\Cirrious.FluentLayouts.Touch.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -92,25 +98,11 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ExampleContentA.cs" />
-    <Compile Include="ExampleContentA.designer.cs">
-      <DependentUpon>ExampleContentA.cs</DependentUpon>
-    </Compile>
     <Compile Include="ExampleContentB.cs" />
-    <Compile Include="ExampleContentB.designer.cs">
-      <DependentUpon>ExampleContentB.cs</DependentUpon>
-    </Compile>
     <Compile Include="Panels\LeftPanelViewController.cs" />
-    <Compile Include="Panels\LeftPanelViewController.designer.cs">
-      <DependentUpon>LeftPanelViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Panels\BottomPanelViewController.cs" />
-    <Compile Include="Panels\BottomPanelViewController.designer.cs">
-      <DependentUpon>BottomPanelViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Panels\RightPanelViewController.cs" />
-    <Compile Include="Panels\RightPanelViewController.designer.cs">
-      <DependentUpon>RightPanelViewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="LayoutSwitch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -118,15 +110,6 @@
       <Project>{2FD1999D-45B1-4485-BF96-EAB061481945}</Project>
       <Name>SlidingPanels.Touch</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <InterfaceDefinition Include="ExampleContentA_iPhone.xib" />
-    <InterfaceDefinition Include="ExampleContentA_iPad.xib" />
-    <InterfaceDefinition Include="ExampleContentB_iPhone.xib" />
-    <InterfaceDefinition Include="ExampleContentB_iPad.xib" />
-    <InterfaceDefinition Include="Panels\LeftPanelViewController.xib" />
-    <InterfaceDefinition Include="Panels\BottomPanelViewController.xib" />
-    <InterfaceDefinition Include="Panels\RightPanelViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Default-568h%402x.png" />
