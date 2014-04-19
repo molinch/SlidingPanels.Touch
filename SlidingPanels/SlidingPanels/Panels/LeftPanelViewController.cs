@@ -69,10 +69,12 @@ namespace SlidingPanels.Panels
 			);
 
 			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
-			/*View.AddConstraints (
-				View.Width().EqualTo(200),
-				buttonB.Below(buttonA)
-			);*/
+			View.AddConstraints (
+				buttonA.AtTopOf(View, 30),
+				buttonA.WithSameCenterX(View),
+				buttonB.Below(buttonA),
+				buttonB.WithSameCenterX(buttonA)
+			);
 		}
 	}
 }

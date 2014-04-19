@@ -25,6 +25,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib;
 using SlidingPanels.Lib.PanelContainers;
+using Cirrious.FluentLayouts.Touch;
 
 namespace SlidingPanels
 {
@@ -34,7 +35,21 @@ namespace SlidingPanels
 		{
 			base.ViewDidLoad ();
 
-			// Perform any additional setup after loading the view, typically from a nib.
+			View.BackgroundColor = UIColor.Blue;
+
+			var title = new UILabel () {
+				Text = "This is screen B",
+			};
+
+			View.AddSubviews (
+				title
+			);
+
+			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
+			View.AddConstraints (
+				title.AtTopOf(View, 70),
+				title.WithSameCenterX(View)
+			);
 		}
 	}
 }

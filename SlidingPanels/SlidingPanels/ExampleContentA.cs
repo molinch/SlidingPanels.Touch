@@ -68,11 +68,11 @@ namespace SlidingPanels
 			var title = new UILabel () {
 				Text = "This is screen A",
 			};
-			title.Font = UIFont.FromDescriptor (title.Font.FontDescriptor, 14);
 
 			var info = new UILabel () {
 				Text = "If you want to switch the layout choose one here:"
 			};
+			info.Font = UIFont.FromDescriptor (info.Font.FontDescriptor, 14);
 
 			var window = UIApplication.SharedApplication.Windows[0];
 			var btnShift = new UIButton (UIButtonType.System);
