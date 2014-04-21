@@ -24,13 +24,12 @@ namespace SlidingPanels.Lib.TransitionEffects
 			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size));
 			container.View.ClipsToBounds = true;
 			container.View.Add(backgroundShifter);
-			backgroundShifter.Superview.SendSubviewToBack(backgroundShifter);
+			container.View.SendSubviewToBack(backgroundShifter);
+			GenerateTransluency ();
 		}
 
 		public void ShowContainer()
 		{
-			GenerateTransluency();
-			backgroundShifter.Frame = new RectangleF(new PointF(0, 0), container.View.Frame.Size);
 		}
 
 		public void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
@@ -86,6 +85,46 @@ namespace SlidingPanels.Lib.TransitionEffects
 				var window = UIApplication.SharedApplication.KeyWindow ?? UIApplication.SharedApplication.Windows[0];
 				var navController = window.RootViewController.ChildViewControllers[0];
 				return navController.ChildViewControllers.LastOrDefault();
+			}
+		}
+
+		private UIWindow Window {
+			get {
+				return UIApplication.SharedApplication.KeyWindow;
+			}
+		}
+
+		/// <summary>
+		/// Indicates if the device is in landscape mode.
+		/// </summary>
+		/// <value><c>true</c> if the device is in landscape mode; otherwise, <c>false</c>.</value>
+		public static bool IsLandscapeOrientation {
+			get {
+				return UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeLeft || UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeRight;
+			}
+		}
+
+		/// <summary>
+		/// Gives the real current window width which takes care of the current orientation.
+		/// </summary>
+		/// <value>Real current window width which takes care of the current orientation.</value>
+		private float CurrentScreenWidth {
+			get {
+				if (IsLandscapeOrientation)
+					return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
+				return Math.Min(Window.Bounds.Width, Window.Bounds.Height);
+			}
+		}
+
+		/// <summary>
+		/// Gives the real current window height which takes care of the current orientation.
+		/// </summary>
+		/// <value>Real current window height which takes care of the current orientation.</value>
+		public float CurrentScreenHeight {
+			get {
+				if (IsLandscapeOrientation)
+					return Math.Min (Window.Bounds.Width, Window.Bounds.Height);
+				return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
 			}
 		}
 	}

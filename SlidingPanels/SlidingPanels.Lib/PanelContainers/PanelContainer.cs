@@ -209,7 +209,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <summary>
         /// Makes this Panel visible
         /// </summary>
-        public virtual void Show ()
+		public virtual void Show ()
         {
 			TransitionLogic.Show(View);
         }

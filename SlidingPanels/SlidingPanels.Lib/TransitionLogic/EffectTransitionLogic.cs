@@ -134,6 +134,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// Makes this Panel visible
 		/// </summary>
 		public override void Show(UIView contentView) {
+			base.Show (contentView);
 			if (!containerCustomized) {
 				this.effect.CustomizeContainer();
 				containerCustomized = true;
@@ -148,6 +149,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		public override void Hide (UIView contentView)
 		{
+			base.Hide (contentView);
 			transitionLogic.Hide(contentView);
 		}
 
