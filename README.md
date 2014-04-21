@@ -9,6 +9,7 @@ Translucency effect, like in iOS7 navigation bar, has also been added. See scree
 
 The translucency is applied on top of elements while the menu is slided by the user.
 
+Please note that the the demo Touch project contains a Nuget reference to Cirrious.FluentLayouts.Touch. This allows to use AutoLayout instead of the Xibs.
 
 Original Readme from Pat
 -------------------------

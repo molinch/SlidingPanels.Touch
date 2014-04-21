@@ -12,9 +12,9 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// </summary>
 		public override void Show (UIView contentView)
 		{
-			if (contentView.Hidden)
-				contentView.Frame = new RectangleF(new PointF(CurrentController.View.Frame.Width, 0), contentView.Frame.Size);
-			contentView.Hidden = false;
+			base.Show (contentView);
+			if (contentView.Superview != null)
+				contentView.Superview.BringSubviewToFront(contentView);
 		}
 
 		protected UIViewController CurrentController
@@ -25,6 +25,12 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 				var navController = window.RootViewController.ChildViewControllers[0];
 				return navController.ChildViewControllers.LastOrDefault();
 			}
+		}
+
+		public override void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize)
+		{
+			panelView.Frame = GetPanelPosition(contentView, panelSize);
+			contentView.Frame = new RectangleF (contentView.Frame.Location, panelView.Frame.Size);
 		}
 	}
 }

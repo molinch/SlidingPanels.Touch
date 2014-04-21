@@ -152,6 +152,11 @@ namespace SlidingPanels.Lib.TransitionLogic
 		}
 
 		#endregion
+
+		public override void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize)
+		{
+			transitionLogic.ResizeViews (contentView, panelView, panelSize);
+		}
 	}
 }
 

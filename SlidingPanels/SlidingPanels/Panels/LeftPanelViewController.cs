@@ -44,7 +44,6 @@ namespace SlidingPanels.Panels
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			View.BackgroundColor = UIColor.Green;
 			View.Frame = new RectangleF (View.Frame.Location, new SizeF (View.Frame.Width/2, View.Frame.Height));
 
 			var buttonA = new UIButton (UIButtonType.System) {

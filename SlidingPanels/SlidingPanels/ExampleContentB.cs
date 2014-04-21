@@ -41,14 +41,24 @@ namespace SlidingPanels
 				Text = "This is screen B",
 			};
 
+			var paysage = new UIImageView(UIImage.FromBundle("Images/paysage.jpg")) {
+				ContentMode = UIViewContentMode.ScaleAspectFill,
+				TranslatesAutoresizingMaskIntoConstraints = false,
+			};
+
 			View.AddSubviews (
-				title
+				title,
+				paysage
 			);
 
 			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
 			View.AddConstraints (
 				title.AtTopOf(View, 70),
-				title.WithSameCenterX(View)
+				title.WithSameCenterX(View),
+				paysage.WithSameLeft(View),
+				paysage.WithSameRight(View),
+				paysage.WithSameTop(View),
+				paysage.WithSameBottom(View)
 			);
 		}
 	}

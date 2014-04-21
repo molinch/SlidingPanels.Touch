@@ -6,6 +6,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib.TransitionLogic;
 using SlidingPanels.Lib.TransitionLogic.Overlap;
+using SlidingPanels.Lib.TransitionLogic.Shift;
 
 namespace SlidingPanels.Lib.Layouts
 {
@@ -17,11 +18,9 @@ namespace SlidingPanels.Lib.Layouts
 		protected const float AnimationSpeed = 0.25f;
 
 		#region Handle touch gestures
-		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, PointF touchPt) {
-			if (container == null || container.View.Superview == null)
-				return;
-
-			container.View.Superview.BringSubviewToFront(container.View);
+		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, PointF touchPt)
+		{
+			BringContainerToForeground (container);
 		}
 
 		public void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, PointF touchPt) {
@@ -39,7 +38,7 @@ namespace SlidingPanels.Lib.Layouts
 		{
 			switch (panelType) {
 				case PanelType.LeftPanel:
-					throw new NotImplementedException("Currently only the right panel can be an overlapped panel.");
+					return new OverlapLeftPanelContainerTransitionLogic ();
 				case PanelType.RightPanel:
 					return new OverlapRightPanelContainerTransitionLogic();
 				case PanelType.BottomPanel:
@@ -57,18 +56,17 @@ namespace SlidingPanels.Lib.Layouts
 		public void WhenPanelInserted(UIViewController slidingController, PanelContainer container)
 		{
 			container.View.Frame = container.GetContainerViewPositionWhenSliderIsHidden(slidingController.View.Frame);
+			BringContainerToForeground (container);
 		}
 
 		public void WhenPanelStartsShowing(PanelContainer container, UIInterfaceOrientation orientation)
 		{
+			BringContainerToForeground (container);
 		}
 
 		public void CompleteShowPanel(UIViewController slidingController, PanelContainer container, Action onComplete)
 		{
 			container.Show();
-			if (container.View.Superview != null) {
-				container.View.Superview.BringSubviewToFront(container.View);
-			}
 			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
 				delegate {
 					container.View.Frame = container.GetContainerViewPositionWhenSliderIsVisible(slidingController.View.Frame);
@@ -90,15 +88,17 @@ namespace SlidingPanels.Lib.Layouts
 				},
 				delegate
 				{
-					if (container.View.Superview != null) {
-						container.View.Superview.SendSubviewToBack(container.View);
-					}
 					if (onComplete != null)
 						onComplete();
 				});
 		}
 
 		#endregion
+
+		private void BringContainerToForeground(PanelContainer container) {
+			if (container != null && container.View.Superview != null)
+				container.View.Superview.BringSubviewToFront(container.View);
+		}
 	}
 }
 

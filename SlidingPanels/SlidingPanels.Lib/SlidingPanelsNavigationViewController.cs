@@ -131,7 +131,7 @@ namespace SlidingPanels.Lib
             _panelContainers = new List<PanelContainer>();
 
             _tapToClose = new UITapGestureRecognizer();
-            _tapToClose.AddTarget(() => HidePanel(CurrentActivePanelContainer));
+			_tapToClose.AddTarget(() => HidePanel(CurrentActivePanelContainer));
 
 			_slidingGesture = CreateGestureRecogniser();
 

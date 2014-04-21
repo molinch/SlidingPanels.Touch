@@ -44,9 +44,24 @@ namespace SlidingPanels.Panels
 		{
 			base.ViewDidLoad ();
 
-			//View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
-			View.BackgroundColor = UIColor.Red;
 			View.Frame = new RectangleF (View.Frame.Location, new SizeF (View.Frame.Width/2, View.Frame.Height));
+
+			var info = new UILabel () {
+				Text = "This is the right panel",
+				LineBreakMode = UILineBreakMode.WordWrap,
+				Lines = 2,
+				TranslatesAutoresizingMaskIntoConstraints = false,
+				TextAlignment = UITextAlignment.Center
+			};
+
+			View.AddSubview (info);
+
+			View.AddConstraints (
+				info.WithSameTop(View),
+				info.WithSameLeft(View),
+				info.WithSameRight(View),
+				info.WithSameBottom(View)
+			);
 		}
 	}
 }

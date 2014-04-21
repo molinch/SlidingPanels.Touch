@@ -87,12 +87,20 @@ namespace SlidingPanels
 			btnBlurry.SetTitle ("Blurry", UIControlState.Normal);
 			btnBlurry.TouchUpInside += (sender, e) => LayoutSwitch.ApplyBlurry(window);
 
+			var infoBlurry = new UILabel () {
+				Text = "Try blurry with the screen B (from left menu)",
+				Lines = 2,
+				LineBreakMode = UILineBreakMode.WordWrap,
+				TextAlignment = UITextAlignment.Center
+			};
+
 			View.AddSubviews (
 				title,
 				info,
 				btnShift,
 				btnOverlapping,
-				btnBlurry
+				btnBlurry,
+				infoBlurry
 			);
 
 			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
@@ -106,7 +114,10 @@ namespace SlidingPanels
 				btnOverlapping.Below(btnShift, 5),
 				btnOverlapping.WithSameCenterX(title),
 				btnBlurry.Below(btnOverlapping, 5),
-				btnBlurry.WithSameCenterX(title)
+				btnBlurry.WithSameCenterX(title),
+				infoBlurry.Below(btnBlurry),
+				infoBlurry.WithSameLeft(View),
+				infoBlurry.WithSameRight(View)
 			);
 		}
 	}

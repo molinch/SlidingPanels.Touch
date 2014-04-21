@@ -70,7 +70,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <value><c>true</c> if this instance is visible; otherwise, <c>false</c>.</value>
         public virtual bool IsVisible { 
             get { 
-                return !View.Hidden; 
+				return TransitionLogic.IsVisible; 
             } 
         }
 
@@ -145,7 +145,7 @@ namespace SlidingPanels.Lib.PanelContainers
             View.AddSubview (PanelVC.View);
 
             Hide ();
-			PanelVC.View.Frame = TransitionLogic.GetPanelPosition(View, Size);
+			TransitionLogic.ResizeViews(View, PanelVC.View, Size);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			Layout.WhenPanelStartsShowing(this, InterfaceOrientation);
             PanelVC.ViewWillAppear (animated);
             base.ViewWillAppear (animated);
-			PanelVC.View.Frame = TransitionLogic.GetPanelPosition(View, Size);
+			TransitionLogic.ResizeViews(View, PanelVC.View, Size);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         public virtual void Toggle ()
         {
-            if (View.Hidden) {
+			if (!IsVisible) {
                 Show ();
             } else {
                 Hide ();

@@ -100,7 +100,6 @@
     <Compile Include="ExampleContentA.cs" />
     <Compile Include="ExampleContentB.cs" />
     <Compile Include="Panels\LeftPanelViewController.cs" />
-    <Compile Include="Panels\BottomPanelViewController.cs" />
     <Compile Include="Panels\RightPanelViewController.cs" />
     <Compile Include="LayoutSwitch.cs" />
   </ItemGroup>
@@ -124,5 +123,6 @@
     <BundleResource Include="Resources\Icon-72%402x.png" />
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
+    <BundleResource Include="Images\paysage.jpg" />
   </ItemGroup>
 </Project>

@@ -123,20 +123,28 @@ namespace SlidingPanels.Lib.TransitionLogic
 
 		#region Appearance Methods
 
+		public bool IsVisible {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Makes this Panel visible
 		/// </summary>
-		public abstract void Show(UIView contentView);
+		public virtual void Show(UIView contentView) {
+			IsVisible = true;
+		}
 
 		/// <summary>
 		/// Hides this Panel
 		/// </summary>
-		public virtual void Hide (UIView contentView)
-		{
-			contentView.Hidden = true;
+		public virtual void Hide (UIView contentView) {
+			IsVisible = false;
 		}
 
 		#endregion
+
+		public abstract void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize);
 	}
 }
 

@@ -6,7 +6,7 @@ using SlidingPanels.Lib.Layouts;
 
 namespace SlidingPanels.Lib.TransitionLogic.Overlap
 {
-	public class OverlapRightPanelContainerTransitionLogic : OverlapPanelContainerTransitionLogic
+	public class OverlapLeftPanelContainerTransitionLogic : OverlapPanelContainerTransitionLogic
 	{
 		#region Data Members
 
@@ -39,7 +39,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override RectangleF GetContainerViewPositionWhenSliderIsHidden(RectangleF containerFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
-			containerFrame.X = topViewCurrentFrame.Width;
+			containerFrame.X = -panelSize.Width;
 			return containerFrame;
 		}
 
@@ -50,7 +50,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override RectangleF GetContainerViewPositionWhenSliderIsVisible(RectangleF containerFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
-			containerFrame.X = topViewCurrentFrame.Width - panelSize.Width;
+			containerFrame.X = 0;
 			return containerFrame;
 		}
 
@@ -65,8 +65,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
 		public override bool SlidingAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			return (touchPosition.X >= topViewCurrentFrame.Size.Width - EdgeTolerance)
-				&& (touchPosition.X <= topViewCurrentFrame.Size.Width);
+			return (touchPosition.X >= 0.0f && touchPosition.X <= EdgeTolerance);
 		}
 
 		/// <summary>
@@ -76,7 +75,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override void SlidingStarted (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			_touchPositionStartXPosition = touchPosition.X;
+			_touchPositionStartXPosition = touchPosition.X - panelSize.Width;
 		}
 
 		/// <summary>
@@ -87,12 +86,13 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		public override RectangleF Sliding (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
 			float panelWidth = panelSize.Width;
-			float x = touchPosition.X;
+			float x = touchPosition.X - panelWidth;
 
-			if (x < (topViewCurrentFrame.Width - panelWidth))
-				x = topViewCurrentFrame.Width - panelWidth;
-			if (x > topViewCurrentFrame.Width)
-				x = topViewCurrentFrame.Width;
+			if (x < (-panelSize.Width))
+				x = -panelSize.Width;
+
+			if (x > 0)
+				x = 0;
 
 			RectangleF frame = contentView.Frame;
 			frame.X = x;
@@ -108,9 +108,8 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override bool SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			float screenWidth = topViewCurrentFrame.Width;
 			float panelWidth = panelSize.Width;
-			float visibleWidth = screenWidth - contentView.Frame.X;
+			float visibleWidth = contentView.Frame.Width + contentView.Frame.X;
 			return visibleWidth > (panelWidth / 2);
 		}
 	}

@@ -67,5 +67,6 @@
     <Compile Include="TransitionLogic\Overlap\OverlapPanelContainerTransitionLogic.cs" />
     <Compile Include="TransitionLogic\Overlap\OverlapRightPanelContainerTransitionLogic.cs" />
     <Compile Include="TransitionLogic\EffectTransitionLogic.cs" />
+    <Compile Include="TransitionLogic\Overlap\OverlapLeftPanelContainerTransitionLogic.cs" />
   </ItemGroup>
 </Project>
