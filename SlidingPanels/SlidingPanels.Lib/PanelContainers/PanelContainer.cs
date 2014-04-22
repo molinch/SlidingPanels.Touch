@@ -226,10 +226,12 @@ namespace SlidingPanels.Lib.PanelContainers
 			if (!SlidingAllowed)
 				return false;
 
-			if (IsVisible)
-				return topViewCurrentFrame.Contains(touchPosition);
+			if (IsVisible) {
+				if (TransitionLogic.SlidingToHideAllowed(touchPosition, topViewCurrentFrame, View, Size))
+					return topViewCurrentFrame.Contains(touchPosition);
+			}
 
-			return TransitionLogic.SlidingAllowed(touchPosition, topViewCurrentFrame, View, Size);
+			return TransitionLogic.SlidingToShowAllowed(touchPosition, topViewCurrentFrame, View, Size);
 		}
 
         #endregion

@@ -100,9 +100,15 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public override bool SlidingAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
 			return (touchPosition.X >= 0.0f && touchPosition.X <= EdgeTolerance);
+		}
+
+		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		{
+			// TODO FMT: to be implemented...
+			return true;
 		}
 
 		/// <summary>

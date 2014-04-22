@@ -79,9 +79,14 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public override bool SlidingAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			return transitionLogic.SlidingAllowed(touchPosition, topViewCurrentFrame, contentView, panelSize);
+			return transitionLogic.SlidingToShowAllowed(touchPosition, topViewCurrentFrame, contentView, panelSize);
+		}
+
+		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		{
+			return transitionLogic.SlidingToHideAllowed(touchPosition, topViewCurrentFrame, contentView, panelSize);
 		}
 
 		/// <summary>

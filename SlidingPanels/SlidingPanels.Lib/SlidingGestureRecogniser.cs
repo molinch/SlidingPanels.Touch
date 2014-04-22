@@ -106,27 +106,6 @@ namespace SlidingPanels.Lib
 				{ 
 					return false; 
 				}
-					
-				// FMT: if the displayed view covers the whole screen then this test should probably be skipped
-				// waiting for Pat answers on this: https://github.com/patbonecrusher/SlidingPanels.Touch/issues/6
-				// until then this is commented
-				/*
-				bool validTouch = false;
-				UIView touchView = touch.View;
-				while (touchView != null)
-				{
-					if (touchView == contentView)
-					{
-						validTouch = true;
-						break;
-					}
-					touchView = touchView.Superview;
-				}
-				if (!validTouch)
-				{
-					return false;
-				}
-				*/
 
 				return shouldReceiveTouch(sender, touch);
 			};
@@ -182,7 +161,12 @@ namespace SlidingPanels.Lib
 			} 
 			else 
 			{
-				CurrentActivePanelContainer.SlidingStarted (touchPt, SlidingController.View.Frame);
+				if (CurrentActivePanelContainer.CanStartSliding(touchPt, SlidingController.View.Frame)) {
+					CurrentActivePanelContainer.SlidingStarted(touchPt, SlidingController.View.Frame);
+				} else {
+					State = UIGestureRecognizerState.Failed;
+					return;
+				}
 			}
 
 			layout.SlidingGestureBegan(SlidingController, CurrentActivePanelContainer, touchPt);

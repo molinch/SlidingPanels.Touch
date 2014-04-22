@@ -85,6 +85,8 @@ namespace SlidingPanels.Lib.TransitionLogic
 
 		#region Sliding Methods
 
+		public abstract bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+
 		/// <summary>
 		/// Determines whether this instance can start sliding given the touch position and the 
 		/// current location/size of the top view. 
@@ -94,7 +96,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public abstract bool SlidingAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
 
 		/// <summary>
 		/// Called when sliding has started on this Panel

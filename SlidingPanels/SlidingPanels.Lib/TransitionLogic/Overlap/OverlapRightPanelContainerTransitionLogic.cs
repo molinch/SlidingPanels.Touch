@@ -63,10 +63,14 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public override bool SlidingAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			return (touchPosition.X >= topViewCurrentFrame.Size.Width - EdgeTolerance)
-				&& (touchPosition.X <= topViewCurrentFrame.Size.Width);
+			return (touchPosition.X >= topViewCurrentFrame.Size.Width - EdgeTolerance) && (touchPosition.X <= topViewCurrentFrame.Size.Width);
+		}
+
+		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		{
+			return (touchPosition.X >= topViewCurrentFrame.Size.Width - panelSize.Width - EdgeTolerance) && (touchPosition.X <= topViewCurrentFrame.Size.Width - panelSize.Width + EdgeTolerance);
 		}
 
 		/// <summary>
