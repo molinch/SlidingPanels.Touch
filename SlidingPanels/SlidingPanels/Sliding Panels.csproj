@@ -83,16 +83,20 @@
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
     <Reference Include="Cirrious.FluentLayouts.Touch">
-      <HintPath>..\..\..\..\packages\Cirrious.FluentLayout\Cirrious.FluentLayouts.Touch.dll</HintPath>
+      <HintPath>libs\Cirrious.FluentLayout\Cirrious.FluentLayouts.Touch.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Panels\" />
     <Folder Include="Images\" />
+    <Folder Include="libs\" />
+    <Folder Include="libs\Cirrious.FluentLayout\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="libs\Cirrious.FluentLayout\README.txt" />
+    <None Include="libs\Cirrious.FluentLayout\Cirrious.FluentLayouts.Touch.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
