@@ -145,7 +145,7 @@ namespace SlidingPanels.Lib.PanelContainers
             View.AddSubview (PanelVC.View);
 
             Hide ();
-			TransitionLogic.ResizeViews(View, PanelVC.View, Size);
+			TransitionLogic.ResizeViews(this);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			Layout.WhenPanelStartsShowing(this, InterfaceOrientation);
             PanelVC.ViewWillAppear (animated);
             base.ViewWillAppear (animated);
-			TransitionLogic.ResizeViews(View, PanelVC.View, Size);
+			TransitionLogic.ResizeViews(this);
         }
 
         /// <summary>
@@ -190,6 +190,12 @@ namespace SlidingPanels.Lib.PanelContainers
             base.ViewDidDisappear (animated);
         }
 
+		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
+		{
+			base.DidRotate (fromInterfaceOrientation);
+			TransitionLogic.RotateView (this);
+		}
+
         #endregion
 
         #region Visibility Control
@@ -211,7 +217,8 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
 		public virtual void Show ()
         {
-			TransitionLogic.Show(View);
+			Console.WriteLine ("PanelContainer.Show");
+			TransitionLogic.Show(this);
         }
 
         /// <summary>
@@ -219,7 +226,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         public virtual void Hide ()
         {
-			TransitionLogic.Hide(View);
+			TransitionLogic.Hide(this);
         }
 
 		public virtual bool CanStartSliding(PointF touchPosition, RectangleF topViewCurrentFrame) {

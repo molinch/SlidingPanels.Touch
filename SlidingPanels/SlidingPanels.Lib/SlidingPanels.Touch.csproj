@@ -9,6 +9,8 @@
     <RootNamespace>SlidingPanels.Lib</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>SlidingPanels.Lib</AssemblyName>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,5 +68,6 @@
     <Compile Include="TransitionLogic\Overlap\OverlapRightPanelContainerTransitionLogic.cs" />
     <Compile Include="TransitionLogic\EffectTransitionLogic.cs" />
     <Compile Include="TransitionLogic\Overlap\OverlapLeftPanelContainerTransitionLogic.cs" />
+    <Compile Include="Tools\WindowState.cs" />
   </ItemGroup>
 </Project>

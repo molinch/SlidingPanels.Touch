@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoTouch.UIKit;
 using System.Drawing;
+using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic.Shift
 {
@@ -9,22 +10,27 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// <summary>
 		/// Makes this Panel visible
 		/// </summary>
-		public override void Show (UIView contentView)
+		public override void Show (PanelContainer container)
 		{
-			base.Show (contentView);
-			contentView.Layer.ZPosition = -1;
-			contentView.Hidden = false;
+			base.Show (container);
+			container.View.Layer.ZPosition = -1;
+			container.View.Hidden = false;
 		}
 
-		public override void Hide (UIView contentView)
+		public override void Hide (PanelContainer container)
 		{
-			base.Hide (contentView);
-			contentView.Hidden = true;
+			base.Hide (container);
+			container.View.Hidden = true;
 		}
 
-		public override void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize)
+		public override void ResizeViews (PanelContainer container)
 		{
-			panelView.Frame = this.GetPanelPosition(contentView, panelSize);
+			container.PanelVC.View.Frame = this.GetPanelPosition(container.View, container.Size);
+		}
+
+		public override void RotateView (PanelContainer container)
+		{
+			ResizeViews(container);
 		}
 	}
 }

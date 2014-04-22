@@ -39,7 +39,28 @@ namespace SlidingPanels
 
 			var title = new UILabel () {
 				Text = "This is screen B",
+				TextColor = UIColor.White
 			};
+
+			var info = new UILabel () {
+				Text = "Slide manually the panels or use the buttons below",
+				TextColor = UIColor.White,
+				Lines = 2,
+				LineBreakMode = UILineBreakMode.WordWrap,
+				TextAlignment = UITextAlignment.Center
+			};
+
+			var navController = NavigationController as SlidingPanelsNavigationViewController;
+
+			var btnTriggerLeftMenu = new UIButton (UIButtonType.System);
+			btnTriggerLeftMenu.SetTitle ("Toggle left menu", UIControlState.Normal);
+			btnTriggerLeftMenu.TouchUpInside += (sender, e) => navController.TogglePanel(PanelType.LeftPanel);
+			btnTriggerLeftMenu.SetTitleColor (UIColor.Yellow, UIControlState.Normal);
+
+			var btnTriggerRightMenu = new UIButton (UIButtonType.System);
+			btnTriggerRightMenu.SetTitle ("Toggle right menu", UIControlState.Normal);
+			btnTriggerRightMenu.TouchUpInside += (sender, e) => navController.TogglePanel(PanelType.RightPanel);
+			btnTriggerRightMenu.SetTitleColor (UIColor.Yellow, UIControlState.Normal);
 
 			var paysage = new UIImageView(UIImage.FromBundle("Images/paysage.jpg")) {
 				ContentMode = UIViewContentMode.ScaleAspectFill,
@@ -47,14 +68,24 @@ namespace SlidingPanels
 			};
 
 			View.AddSubviews (
+				paysage,
 				title,
-				paysage
+				info,
+				btnTriggerLeftMenu,
+				btnTriggerRightMenu
 			);
 
 			View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints ();
 			View.AddConstraints (
 				title.AtTopOf(View, 70),
 				title.WithSameCenterX(View),
+				info.Below(title, 10),
+				info.WithSameLeft(View),
+				info.WithSameRight(View),
+				btnTriggerLeftMenu.Below(info),
+				btnTriggerLeftMenu.WithSameCenterX(title),
+				btnTriggerRightMenu.Below(btnTriggerLeftMenu),
+				btnTriggerRightMenu.WithSameCenterX(title),
 				paysage.WithSameLeft(View),
 				paysage.WithSameRight(View),
 				paysage.WithSameTop(View),

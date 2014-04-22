@@ -314,7 +314,8 @@ namespace SlidingPanels.Lib
 		public virtual void ShowPanel(PanelContainer container)
         {
             container.ViewWillAppear(true);
-            container.Show();
+			if (!container.IsVisible)
+            	container.Show();
 			layout.CompleteShowPanel(this, container, () => {
 				View.AddGestureRecognizer(_tapToClose);
 				container.ViewDidAppear(true);

@@ -25,7 +25,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size)) {
 				Opaque = true
 			};
-			blurryBackground = new UIImageView(new RectangleF(0, 0, CurrentScreenWidth, CurrentScreenHeight)) {
+			blurryBackground = new UIImageView(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight)) {
 				Opaque = true
 			};
 			backgroundShifter.Add(blurryBackground);
@@ -39,11 +39,17 @@ namespace SlidingPanels.Lib.TransitionEffects
 
 		public void ShowContainer()
 		{
-			if (blurryBackground != null && blurryBackground.Image != null) {
-				backgroundShifter.Frame = new RectangleF(
-					0, 0, CurrentScreenWidth, CurrentScreenHeight
-				);
-			}
+			if (!HasBackground || container.IsVisible)
+				return;
+
+			GenerateTranslucency ();
+
+			var resetFrame = new RectangleF (
+				0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
+			);
+			blurryBackground.Frame = resetFrame;
+
+			backgroundShifter.Frame = GetBackgroundShifterEndFrame (resetFrame); // FMT: we are supposed to pass topViewCurrentFrame here :/
 		}
 
 		public void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
@@ -61,9 +67,9 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, RectangleF containerNewFrame)
 		{
-			if (blurryBackground != null && blurryBackground.Image != null) {
+			if (HasBackground) {
 				backgroundShifter.Frame = new RectangleF(
-					0 - containerNewFrame.X, 0, CurrentScreenWidth, CurrentScreenHeight
+					0 - containerNewFrame.X, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
 				);
 			}
 
@@ -76,7 +82,20 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// <returns><c>true</c>, if sliding has ended, <c>false</c> otherwise.</returns>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public void SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame) {
+		public void SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame, bool showing) {
+			if (!HasBackground || !showing)
+				return;
+
+			backgroundShifter.Frame = GetBackgroundShifterEndFrame (topViewCurrentFrame);
+		}
+
+		private RectangleF GetBackgroundShifterEndFrame(RectangleF topViewCurrentFrame) {
+			bool isLeftPanel = container.PanelType == PanelType.LeftPanel;
+			return new RectangleF(
+				isLeftPanel ? 0 : (0 - topViewCurrentFrame.Width + container.Size.Width),
+				0,
+				WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
+			);
 		}
 
 		private void GenerateTranslucency()
@@ -86,7 +105,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 				return;
 
 			var view = displayedController.View;
-			var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, CurrentScreenWidth, CurrentScreenHeight));
+			var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
 			var blurredImage = viewBackground.ApplyLightEffect();
 			blurryBackground.Image = blurredImage;
 		}
@@ -101,46 +120,14 @@ namespace SlidingPanels.Lib.TransitionEffects
 			}
 		}
 
+		private bool HasBackground {
+			get {
+				return blurryBackground != null && blurryBackground.Image != null;
+			}
+		}
+
 		#region Handle width/height independent of the orientation
-		private UIWindow Window {
-			get {
-				return UIApplication.SharedApplication.KeyWindow;
-			}
-		}
 
-		/// <summary>
-		/// Indicates if the device is in landscape mode.
-		/// </summary>
-		/// <value><c>true</c> if the device is in landscape mode; otherwise, <c>false</c>.</value>
-		public static bool IsLandscapeOrientation {
-			get {
-				return UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeLeft || UIApplication.SharedApplication.StatusBarOrientation == UIInterfaceOrientation.LandscapeRight;
-			}
-		}
-
-		/// <summary>
-		/// Gives the real current window width which takes care of the current orientation.
-		/// </summary>
-		/// <value>Real current window width which takes care of the current orientation.</value>
-		private float CurrentScreenWidth {
-			get {
-				if (IsLandscapeOrientation)
-					return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
-				return Math.Min(Window.Bounds.Width, Window.Bounds.Height);
-			}
-		}
-
-		/// <summary>
-		/// Gives the real current window height which takes care of the current orientation.
-		/// </summary>
-		/// <value>Real current window height which takes care of the current orientation.</value>
-		public float CurrentScreenHeight {
-			get {
-				if (IsLandscapeOrientation)
-					return Math.Min (Window.Bounds.Width, Window.Bounds.Height);
-				return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
-			}
-		}
 		#endregion
 	}
 }

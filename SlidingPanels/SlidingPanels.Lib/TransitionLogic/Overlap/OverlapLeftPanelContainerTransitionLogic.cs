@@ -70,7 +70,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 
 		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			return (touchPosition.X >= (topViewCurrentFrame.Width - panelSize.Width - EdgeTolerance) && touchPosition.X <= (topViewCurrentFrame.Width - panelSize.Width + EdgeTolerance));
+			return (touchPosition.X >= (panelSize.Width - EdgeTolerance) && touchPosition.X <= (panelSize.Width + EdgeTolerance));
 		}
 
 		/// <summary>

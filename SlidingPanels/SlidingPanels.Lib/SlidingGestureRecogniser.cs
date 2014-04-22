@@ -246,16 +246,6 @@ namespace SlidingPanels.Lib
 			layout.SlidingGestureEnded(SlidingController, CurrentActivePanelContainer, touchPt);
 		}
 
-		/// <summary>
-		/// Manages what happens when a slide is interrupted
-		/// </summary>
-		/// <param name="touches">Touches.</param>
-		/// <param name="evt">Evt.</param>
-		public override void TouchesCancelled (MonoTouch.Foundation.NSSet touches, UIEvent evt)
-		{
-			base.TouchesCancelled (touches, evt);
-		}
-
 		#endregion
 	}
 }

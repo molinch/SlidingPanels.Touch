@@ -2,6 +2,7 @@
 using System.Drawing;
 using MonoTouch.UIKit;
 using SlidingPanels.Lib.TransitionEffects;
+using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
@@ -127,7 +128,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		public override bool SlidingEnded(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
 			bool ended = transitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, contentView, panelSize);
-			effect.SlidingEnded(touchPosition, topViewCurrentFrame);
+			effect.SlidingEnded(touchPosition, topViewCurrentFrame, ended);
 			return ended;
 		}
 
@@ -138,31 +139,36 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <summary>
 		/// Makes this Panel visible
 		/// </summary>
-		public override void Show(UIView contentView) {
-			base.Show (contentView);
+		public override void Show(PanelContainer container) {
 			if (!containerCustomized) {
 				this.effect.CustomizeContainer();
 				containerCustomized = true;
 			}
 
 			effect.ShowContainer();
-			transitionLogic.Show(contentView);
+			transitionLogic.Show(container);
+			base.Show (container);
 		}
 
 		/// <summary>
 		/// Hides this Panel
 		/// </summary>
-		public override void Hide (UIView contentView)
+		public override void Hide (PanelContainer container)
 		{
-			base.Hide (contentView);
-			transitionLogic.Hide(contentView);
+			transitionLogic.Hide(container);
+			base.Hide (container);
 		}
 
 		#endregion
 
-		public override void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize)
+		public override void ResizeViews (PanelContainer container)
 		{
-			transitionLogic.ResizeViews (contentView, panelView, panelSize);
+			transitionLogic.ResizeViews (container);
+		}
+
+		public override void RotateView (PanelContainer container)
+		{
+			transitionLogic.RotateView (container);
 		}
 	}
 }

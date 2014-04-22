@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using MonoTouch.UIKit;
+using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
@@ -133,20 +134,22 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <summary>
 		/// Makes this Panel visible
 		/// </summary>
-		public virtual void Show(UIView contentView) {
+		public virtual void Show(PanelContainer container) {
 			IsVisible = true;
 		}
 
 		/// <summary>
 		/// Hides this Panel
 		/// </summary>
-		public virtual void Hide (UIView contentView) {
+		public virtual void Hide (PanelContainer container) {
 			IsVisible = false;
 		}
 
 		#endregion
 
-		public abstract void ResizeViews (UIView contentView, UIView panelView, SizeF panelSize);
+		public abstract void ResizeViews (PanelContainer container);
+
+		public abstract void RotateView(PanelContainer container);
 	}
 }
 
