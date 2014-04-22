@@ -1,4 +1,5 @@
 using MonoTouch.UIKit;
+using System.Drawing;
 
 namespace SlidingPanels.Lib.Tools
 {
@@ -6,9 +7,14 @@ namespace SlidingPanels.Lib.Tools
 	{
 		public static UIImage MakeSnapShot(this UIView view)
 		{
-			UIGraphics.BeginImageContext(view.Frame.Size);
+			return MakeSnapShot(view, view.Frame);
+		}
+
+		public static UIImage MakeSnapShot(this UIView view, RectangleF snapshotFrame)
+		{
+			UIGraphics.BeginImageContext(snapshotFrame.Size);
 			try {
-				view.DrawViewHierarchy(view.Frame, true);
+				view.DrawViewHierarchy(snapshotFrame, false);
 				return UIGraphics.GetImageFromCurrentImageContext();
 			} finally {
 				UIGraphics.EndImageContext();

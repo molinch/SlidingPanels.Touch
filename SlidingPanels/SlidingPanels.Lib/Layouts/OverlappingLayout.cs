@@ -66,7 +66,8 @@ namespace SlidingPanels.Lib.Layouts
 
 		public void CompleteShowPanel(UIViewController slidingController, PanelContainer container, Action onComplete)
 		{
-			container.Show();
+			if (!container.IsVisible)
+				container.Show();
 			UIView.Animate(AnimationSpeed, 0, UIViewAnimationOptions.CurveEaseInOut,
 				delegate {
 					container.View.Frame = container.GetContainerViewPositionWhenSliderIsVisible(slidingController.View.Frame);

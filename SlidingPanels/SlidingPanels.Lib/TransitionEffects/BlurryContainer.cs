@@ -5,6 +5,7 @@ using SlidingPanels.Lib.Tools;
 using UIImageEffects;
 using System.Drawing;
 using SlidingPanels.Lib.PanelContainers;
+using System.Threading.Tasks;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
@@ -21,20 +22,36 @@ namespace SlidingPanels.Lib.TransitionEffects
 
 		public void CustomizeContainer()
 		{
-			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size));
+			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size)) {
+				Opaque = true
+			};
+			blurryBackground = new UIImageView(new RectangleF(0, 0, CurrentScreenWidth, CurrentScreenHeight)) {
+				Opaque = true
+			};
+			backgroundShifter.Add(blurryBackground);
+
 			container.View.ClipsToBounds = true;
 			container.View.Add(backgroundShifter);
 			container.View.SendSubviewToBack(backgroundShifter);
-			GenerateTransluency ();
+
+			GenerateTranslucency ();
 		}
 
 		public void ShowContainer()
 		{
+			if (blurryBackground != null && blurryBackground.Image != null) {
+				backgroundShifter.Frame = new RectangleF(
+					0, 0, CurrentScreenWidth, CurrentScreenHeight
+				);
+			}
 		}
 
 		public void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
 		{
-			GenerateTransluency();
+			if (container.View.Frame == container.GetContainerViewPositionWhenSliderIsVisible(topViewCurrentFrame))
+				return;
+
+			GenerateTranslucency();
 		}
 
 		/// <summary>
@@ -44,9 +61,9 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, RectangleF containerNewFrame)
 		{
-			if (blurryBackground != null) {
+			if (blurryBackground != null && blurryBackground.Image != null) {
 				backgroundShifter.Frame = new RectangleF(
-					0 - containerNewFrame.X, 0, topViewCurrentFrame.Width, topViewCurrentFrame.Height
+					0 - containerNewFrame.X, 0, CurrentScreenWidth, CurrentScreenHeight
 				);
 			}
 
@@ -62,20 +79,16 @@ namespace SlidingPanels.Lib.TransitionEffects
 		public void SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame) {
 		}
 
-		private void GenerateTransluency()
+		private void GenerateTranslucency()
 		{
 			var displayedController = CurrentController;
 			if (displayedController == null)
 				return;
 
-			var viewBackground = displayedController.View.MakeSnapShot();
-
-			if (blurryBackground != null) {
-				blurryBackground.RemoveFromSuperview();
-			}
-			blurryBackground = new UIImageView(viewBackground.ApplyLightEffect());
-
-			backgroundShifter.Add(blurryBackground);
+			var view = displayedController.View;
+			var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, CurrentScreenWidth, CurrentScreenHeight));
+			var blurredImage = viewBackground.ApplyLightEffect();
+			blurryBackground.Image = blurredImage;
 		}
 
 		private UIViewController CurrentController
@@ -88,6 +101,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 			}
 		}
 
+		#region Handle width/height independent of the orientation
 		private UIWindow Window {
 			get {
 				return UIApplication.SharedApplication.KeyWindow;
@@ -127,6 +141,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 				return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
 			}
 		}
+		#endregion
 	}
 }
 
