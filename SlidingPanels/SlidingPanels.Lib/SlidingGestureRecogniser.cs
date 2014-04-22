@@ -107,6 +107,9 @@ namespace SlidingPanels.Lib
 					return false; 
 				}
 
+				// FMT: the extra code to check if the touch was within the view is no longer necessary when implementing TransitionLogic.SlidingToHideAllowed
+				// This method should now be responsible to check if we accept the slide (see an example in OverlapLeftPanelContainerTransitionLogic or SlidingToHideAllowed)
+
 				return shouldReceiveTouch(sender, touch);
 			};
 		}
