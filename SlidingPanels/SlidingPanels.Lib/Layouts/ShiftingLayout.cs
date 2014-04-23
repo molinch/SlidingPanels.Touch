@@ -8,6 +8,9 @@ using SlidingPanels.Lib.TransitionLogic.Shift;
 
 namespace SlidingPanels.Lib.Layouts
 {
+	/// <summary>
+	/// Shifting layout for the sliding panels. Shifting means that the whole frame will move.
+	/// </summary>
 	public class ShiftingLayout: ISlidingLayout
 	{
 		#region Constants

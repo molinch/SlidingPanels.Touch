@@ -7,7 +7,7 @@ using SlidingPanels.Lib.TransitionLogic;
 namespace SlidingPanels.Lib.Layouts
 {
 	/// <summary>
-	/// Class responsible for the layout of the Navigation Controller
+	/// Contract to implement a custom layout for the sliding panels.
 	/// </summary>
 	public interface ISlidingLayout
 	{

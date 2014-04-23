@@ -7,6 +7,10 @@ using MonoTouch.CoreGraphics;
 
 namespace UIImageEffects
 {
+	/// <summary>
+	/// Apple UI effects ported to MonoTouch by Xamarin: https://github.com/xamarin/monotouch-samples/tree/master/UIImageEffects
+	/// This allows to have the common translucency/blur effect from iOS7.
+	/// </summary>
 	public static class UIImageEffects
 	{
 		public static UIImage ApplyLightEffect (this UIImage self)

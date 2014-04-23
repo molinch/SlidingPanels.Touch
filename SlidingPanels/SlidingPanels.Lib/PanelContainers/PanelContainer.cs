@@ -145,7 +145,7 @@ namespace SlidingPanels.Lib.PanelContainers
             View.AddSubview (PanelVC.View);
 
             Hide ();
-			TransitionLogic.ResizeViews(this);
+			TransitionLogic.ResizeContainer(this);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			Layout.WhenPanelStartsShowing(this, InterfaceOrientation);
             PanelVC.ViewWillAppear (animated);
             base.ViewWillAppear (animated);
-			TransitionLogic.ResizeViews(this);
+			TransitionLogic.ResizeContainer(this);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
 		{
 			base.DidRotate (fromInterfaceOrientation);
-			TransitionLogic.RotateView (this);
+			TransitionLogic.RotateContainer (this);
 		}
 
         #endregion
@@ -217,7 +217,6 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
 		public virtual void Show ()
         {
-			Console.WriteLine ("PanelContainer.Show");
 			TransitionLogic.Show(this);
         }
 

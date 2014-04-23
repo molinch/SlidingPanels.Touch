@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
+	/// <summary>
+	/// Container having the translucency/blurry effect from iOS7.
+	/// </summary>
 	public class BlurryContainer: IPanelContainerWithEffect
 	{
 		private readonly PanelContainer container;
@@ -54,10 +57,6 @@ namespace SlidingPanels.Lib.TransitionEffects
 
 		public void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
 		{
-			if (container.View.Frame == container.GetContainerViewPositionWhenSliderIsVisible(topViewCurrentFrame))
-				return;
-
-			GenerateTranslucency();
 		}
 
 		/// <summary>

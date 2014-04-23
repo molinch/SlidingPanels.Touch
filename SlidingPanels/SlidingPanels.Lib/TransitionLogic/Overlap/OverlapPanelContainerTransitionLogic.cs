@@ -3,9 +3,13 @@ using MonoTouch.UIKit;
 using System.Drawing;
 using System.Linq;
 using SlidingPanels.Lib.PanelContainers;
+using SlidingPanels.Lib.Tools;
 
 namespace SlidingPanels.Lib.TransitionLogic.Overlap
 {
+	/// <summary>
+	/// Base abstract class giving the transition logic for panel containers when using the "overlapping" layout.
+	/// </summary>
 	public abstract class OverlapPanelContainerTransitionLogic: PanelContainerTransitionLogic
 	{
 		/// <summary>
@@ -13,7 +17,6 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 		/// </summary>
 		public override void Show (PanelContainer container)
 		{
-			Console.WriteLine ("Show");
 			base.Show (container);
 
 			container.View.Frame = GetContainerViewPositionWhenSliderIsHidden(container.View.Frame, WindowState.CurrentScreenFrame, container.Size);
@@ -39,16 +42,16 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 			}
 		}
 
-		public override void ResizeViews (PanelContainer container)
+		public override void ResizeContainer (PanelContainer container)
 		{
-			container.View.Frame = new RectangleF (container.View.Frame.Location, container.Size);
+			container.View.Frame = new RectangleF (container.View.Frame.Location.X, 0, container.Size.Width, WindowState.CurrentScreenHeight);
 			container.PanelVC.View.Frame = GetPanelPosition(container.View, container.Size);
 		}
 
-		public override void RotateView (PanelContainer container)
+		public override void RotateContainer (PanelContainer container)
 		{
 			Hide(container); // FMT: currently when we rotate it's really messy so to be easier panels are temporarly hidden
-			ResizeViews(container);
+			ResizeContainer(container);
 		}
 	}
 }

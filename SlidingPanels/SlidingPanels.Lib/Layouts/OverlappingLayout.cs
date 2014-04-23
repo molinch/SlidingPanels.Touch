@@ -10,6 +10,9 @@ using SlidingPanels.Lib.TransitionLogic.Shift;
 
 namespace SlidingPanels.Lib.Layouts
 {
+	/// <summary>
+	/// Overlapping layout for the sliding panels. Overlapping means that the menu will cover the existing content.
+	/// </summary>
 	public class OverlappingLayout: ISlidingLayout
 	{
 		/// <summary>

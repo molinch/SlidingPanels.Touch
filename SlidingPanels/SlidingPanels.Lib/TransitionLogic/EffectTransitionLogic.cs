@@ -6,6 +6,9 @@ using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
+	/// <summary>
+	/// Wrapper containing the transition logic for a panel container plus an additional UI effect (like translucency). 
+	/// </summary>
 	public class EffectTransitionLogic : PanelContainerTransitionLogic
 	{
 		private readonly PanelContainerTransitionLogic transitionLogic;
@@ -161,14 +164,14 @@ namespace SlidingPanels.Lib.TransitionLogic
 
 		#endregion
 
-		public override void ResizeViews (PanelContainer container)
+		public override void ResizeContainer (PanelContainer container)
 		{
-			transitionLogic.ResizeViews (container);
+			transitionLogic.ResizeContainer (container);
 		}
 
-		public override void RotateView (PanelContainer container)
+		public override void RotateContainer (PanelContainer container)
 		{
-			transitionLogic.RotateView (container);
+			transitionLogic.RotateContainer (container);
 		}
 	}
 }

@@ -6,6 +6,9 @@ using SlidingPanels.Lib.Layouts;
 
 namespace SlidingPanels.Lib.TransitionLogic.Overlap
 {
+	/// <summary>
+	/// Transition logic for the left panel container when using the "overlapping" layout.
+	/// </summary>
 	public class OverlapLeftPanelContainerTransitionLogic : OverlapPanelContainerTransitionLogic
 	{
 		#region Data Members

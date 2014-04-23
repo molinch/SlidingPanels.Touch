@@ -5,6 +5,9 @@ using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic.Shift
 {
+	/// <summary>
+	/// Base abstract class giving the transition logic for panel containers when using the "shifting" layout.
+	/// </summary>
 	public abstract class ShiftPanelContainerTransitionLogic: PanelContainerTransitionLogic
 	{
 		/// <summary>
@@ -23,14 +26,14 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 			container.View.Hidden = true;
 		}
 
-		public override void ResizeViews (PanelContainer container)
+		public override void ResizeContainer (PanelContainer container)
 		{
 			container.PanelVC.View.Frame = this.GetPanelPosition(container.View, container.Size);
 		}
 
-		public override void RotateView (PanelContainer container)
+		public override void RotateContainer (PanelContainer container)
 		{
-			ResizeViews(container);
+			ResizeContainer(container);
 		}
 	}
 }

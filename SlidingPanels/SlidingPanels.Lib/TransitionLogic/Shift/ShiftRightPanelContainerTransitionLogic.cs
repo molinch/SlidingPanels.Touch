@@ -28,7 +28,7 @@ using SlidingPanels.Lib.PanelContainers;
 namespace SlidingPanels.Lib.TransitionLogic.Shift
 {
 	/// <summary>
-	/// Container class for Sliding Panels located on the right edge of the device screen
+	/// Transition logic for the right panel container when using the "shifting" layout.
 	/// </summary>
 	public class ShiftRightPanelContainerTransitionLogic : ShiftPanelContainerTransitionLogic
 	{

@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
+	/// <summary>
+	/// Contract to add some UI effect to a container.
+	/// </summary>
 	public interface IPanelContainerWithEffect
 	{
 		void CustomizeContainer();

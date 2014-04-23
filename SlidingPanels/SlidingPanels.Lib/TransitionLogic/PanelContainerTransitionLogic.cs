@@ -5,6 +5,9 @@ using SlidingPanels.Lib.PanelContainers;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
+	/// <summary>
+	/// Base abstract class giving the transition logic for panel containers.
+	/// </summary>
 	public abstract class PanelContainerTransitionLogic
 	{
 		#region Constants
@@ -147,9 +150,9 @@ namespace SlidingPanels.Lib.TransitionLogic
 
 		#endregion
 
-		public abstract void ResizeViews (PanelContainer container);
+		public abstract void ResizeContainer (PanelContainer container);
 
-		public abstract void RotateView(PanelContainer container);
+		public abstract void RotateContainer(PanelContainer container);
 	}
 }
 

@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace SlidingPanels.Lib.Tools
 {
+	/// <summary>
+	/// UIView extensions
+	/// </summary>
 	public static class UIViewExtensions
 	{
 		public static UIImage MakeSnapShot(this UIView view)
