@@ -6,6 +6,7 @@ using UIImageEffects;
 using System.Drawing;
 using SlidingPanels.Lib.PanelContainers;
 using System.Threading.Tasks;
+using MonoTouch.CoreFoundation;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
@@ -104,9 +105,15 @@ namespace SlidingPanels.Lib.TransitionEffects
 				return;
 
 			var view = displayedController.View;
-			var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
-			var blurredImage = viewBackground.ApplyLightEffect();
-			blurryBackground.Image = blurredImage;
+
+			DispatchQueue.MainQueue.DispatchAsync(() => {
+				var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
+				float screenScale = UIScreen.MainScreen.Scale;
+				DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Low).DispatchAsync(() => {
+					UIImage blurredImage = viewBackground.ApplyLightEffect(screenScale);
+					DispatchQueue.MainQueue.DispatchAsync(() => blurryBackground.Image = blurredImage);
+				});
+			});
 		}
 
 		private UIViewController CurrentController
