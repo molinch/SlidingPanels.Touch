@@ -22,9 +22,13 @@ namespace SlidingPanels.Lib.TransitionEffects
 		public BlurryContainer(PanelContainer container)
 		{
 			this.container = container;
+
+			/* add blurring stuff to the container */
+			/* this is done now otherwise there might be a subtle lag the 1st time the panel is shown */
+			CustomizeContainerInternal();
 		}
 
-		public void CustomizeContainer()
+		private void CustomizeContainerInternal()
 		{
 			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size)) {
 				Opaque = true
@@ -39,6 +43,12 @@ namespace SlidingPanels.Lib.TransitionEffects
 			container.View.SendSubviewToBack(backgroundShifter);
 
 			GenerateTranslucency ();
+		}
+
+		public void CustomizeContainer()
+		{
+			// FMT: blurring is initially performed so there is no delayed customization
+			// This is to avoid any kind of lag the 1st time we use the menu
 		}
 
 		public void ShowContainer()

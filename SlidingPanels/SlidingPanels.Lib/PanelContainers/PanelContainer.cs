@@ -118,14 +118,15 @@ namespace SlidingPanels.Lib.PanelContainers
 			Layout = layout;
 
 			TransitionLogic = layout.CreateTransitionLogic(panelType);
-			if (optionalEffect != null) {
-				TransitionLogic = new EffectTransitionLogic(TransitionLogic, optionalEffect(this));
-			}
 
             PanelVC = panel;
             PanelType = panelType;
             Size = panel.View.Frame.Size;
 			SlidingAllowed = true;
+
+			if (optionalEffect != null) {
+				TransitionLogic = new EffectTransitionLogic(TransitionLogic, optionalEffect(this));
+			}
         }
 
         #endregion
