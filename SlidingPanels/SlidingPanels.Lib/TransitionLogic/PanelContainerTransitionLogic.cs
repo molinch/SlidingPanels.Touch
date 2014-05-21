@@ -150,6 +150,9 @@ namespace SlidingPanels.Lib.TransitionLogic
 
 		#endregion
 
+		public virtual void WhenInserted(UIViewController slidingController, PanelContainer container) {
+		}
+
 		public abstract void ResizeContainer (PanelContainer container);
 
 		public abstract void RotateContainer(PanelContainer container);

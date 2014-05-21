@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using MonoTouch.UIKit;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
@@ -8,7 +9,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 	/// </summary>
 	public interface IPanelContainerWithEffect
 	{
-		void CustomizeContainer();
+		void CustomizeContainer(UIViewController slidingController);
 
 		void ShowContainer();
 

@@ -60,6 +60,7 @@ namespace SlidingPanels.Lib.Layouts
 		{
 			container.View.Frame = container.GetContainerViewPositionWhenSliderIsHidden(slidingController.View.Frame);
 			BringContainerToForeground (container);
+			container.WhenInserted(slidingController);
 		}
 
 		public void WhenPanelStartsShowing(PanelContainer container, UIInterfaceOrientation orientation)

@@ -100,11 +100,6 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public override void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
 		{
-			if (!containerCustomized) {
-				effect.CustomizeContainer();
-				containerCustomized = true;
-			}
-
 			effect.SlidingStarted(touchPosition, topViewCurrentFrame);
 			transitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, contentView, panelSize);
 		}
@@ -143,11 +138,6 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// Makes this Panel visible
 		/// </summary>
 		public override void Show(PanelContainer container) {
-			if (!containerCustomized) {
-				this.effect.CustomizeContainer();
-				containerCustomized = true;
-			}
-
 			effect.ShowContainer();
 			transitionLogic.Show(container);
 			base.Show (container);
@@ -163,6 +153,13 @@ namespace SlidingPanels.Lib.TransitionLogic
 		}
 
 		#endregion
+
+		public override void WhenInserted(UIViewController slidingController, PanelContainer container) {
+			if (!containerCustomized) {
+				effect.CustomizeContainer(slidingController);
+				containerCustomized = true;
+			}
+		}
 
 		public override void ResizeContainer (PanelContainer container)
 		{

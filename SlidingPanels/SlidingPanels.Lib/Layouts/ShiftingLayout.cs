@@ -57,6 +57,7 @@ namespace SlidingPanels.Lib.Layouts
 		/// <param name="container">Container.</param>
 		public void WhenPanelInserted(UIViewController slidingController, PanelContainer container)
 		{
+			container.WhenInserted(slidingController);
 		}
 
 		public void WhenPanelStartsShowing(PanelContainer container, UIInterfaceOrientation orientation)

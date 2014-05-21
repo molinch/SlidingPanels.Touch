@@ -133,6 +133,11 @@ namespace SlidingPanels.Lib.PanelContainers
 
         #region View Lifecycle
 
+		public void WhenInserted(UIViewController slidingController)
+		{
+			TransitionLogic.WhenInserted(slidingController, this);
+		}
+
         /// <summary>
         /// Called when the panel view is first loaded
         /// </summary>

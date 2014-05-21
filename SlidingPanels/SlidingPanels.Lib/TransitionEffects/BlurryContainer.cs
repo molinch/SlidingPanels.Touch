@@ -18,18 +18,17 @@ namespace SlidingPanels.Lib.TransitionEffects
 		private readonly PanelContainer container;
 		private UIView backgroundShifter;
 		private UIImageView blurryBackground;
+		private UIViewController slidingController;
 
 		public BlurryContainer(PanelContainer container)
 		{
 			this.container = container;
-
-			/* add blurring stuff to the container */
-			/* this is done now otherwise there might be a subtle lag the 1st time the panel is shown */
-			CustomizeContainerInternal();
 		}
 
-		private void CustomizeContainerInternal()
+		public void CustomizeContainer(UIViewController slidingController)
 		{
+			this.slidingController = slidingController;
+
 			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size)) {
 				Opaque = true
 			};
@@ -42,13 +41,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 			container.View.Add(backgroundShifter);
 			container.View.SendSubviewToBack(backgroundShifter);
 
-			GenerateTranslucency ();
-		}
-
-		public void CustomizeContainer()
-		{
-			// FMT: blurring is initially performed so there is no delayed customization
-			// This is to avoid any kind of lag the 1st time we use the menu
+			GenerateTranslucency();
 		}
 
 		public void ShowContainer()
@@ -130,9 +123,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 		{
 			get
 			{
-				var window = UIApplication.SharedApplication.KeyWindow ?? UIApplication.SharedApplication.Windows[0];
-				var navController = window.RootViewController.ChildViewControllers[0];
-				return navController.ChildViewControllers.LastOrDefault();
+				return slidingController.ChildViewControllers.LastOrDefault();
 			}
 		}
 
