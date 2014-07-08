@@ -113,7 +113,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 				var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
 				float screenScale = UIScreen.MainScreen.Scale;
 				DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Low).DispatchAsync(() => {
-					UIImage blurredImage = viewBackground.ApplyLightEffect(screenScale);
+					UIImage blurredImage = viewBackground.ApplyLightEffect();
 					DispatchQueue.MainQueue.DispatchAsync(() => blurryBackground.Image = blurredImage);
 				});
 			});

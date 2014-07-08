@@ -13,28 +13,28 @@ namespace UIImageEffects
 	/// </summary>
 	public static class UIImageEffects
 	{
-		public static UIImage ApplyLightEffect (this UIImage self, float screenScale)
+		public static UIImage ApplyLightEffect (this UIImage self)
 		{
 			var tintColor = UIColor.FromWhiteAlpha (1.0f, 0.3f);
 
-			return ApplyBlur (self, blurRadius:30, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null, screenScale: screenScale);
+			return ApplyBlur (self, blurRadius:30, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null);
 		}
 
-		public static UIImage ApplyExtraLightEffect (this UIImage self, float screenScale)
+		public static UIImage ApplyExtraLightEffect (this UIImage self)
 		{
 			var tintColor = UIColor.FromWhiteAlpha (0.97f, 0.82f);
 
-			return ApplyBlur (self, blurRadius:20, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null, screenScale: screenScale);
+			return ApplyBlur (self, blurRadius:20, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null);
 		}
 
-		public static UIImage ApplyDarkEffect (this UIImage self, float screenScale)
+		public static UIImage ApplyDarkEffect (this UIImage self)
 		{
 			var tintColor = UIColor.FromWhiteAlpha (0.11f, 0.73f);
 
-			return ApplyBlur (self, blurRadius:20, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null, screenScale: screenScale);
+			return ApplyBlur (self, blurRadius:20, tintColor:tintColor, saturationDeltaFactor:1.8f, maskImage:null);
 		}
 
-		public static UIImage ApplyTintEffect (this UIImage self, UIColor tintColor, float screenScale)
+		public static UIImage ApplyTintEffect (this UIImage self, UIColor tintColor)
 		{
 			const float EffectColorAlpha = 0.6f;
 			var effectColor = tintColor;
@@ -52,11 +52,13 @@ namespace UIImageEffects
 				} catch {
 				}
 			}
-			return ApplyBlur (self, blurRadius: 10, tintColor: effectColor, saturationDeltaFactor: -1, maskImage: null, screenScale: screenScale);
+			return ApplyBlur (self, blurRadius: 10, tintColor: effectColor, saturationDeltaFactor: -1, maskImage: null);
 		}
 
-		public unsafe static UIImage ApplyBlur (UIImage image, float blurRadius, UIColor tintColor, float saturationDeltaFactor, UIImage maskImage, float screenScale)
+		public unsafe static UIImage ApplyBlur (UIImage image, float blurRadius, UIColor tintColor, float saturationDeltaFactor, UIImage maskImage)
 		{
+			var currentScale = image.CurrentScale;
+
 			if (image.Size.Width < 1 || image.Size.Height < 1) {
 				Debug.WriteLine (@"*** error: invalid size: ({0} x {1}). Both dimensions must be >= 1: {2}", image.Size.Width, image.Size.Height, image);
 				return null;
@@ -77,7 +79,7 @@ namespace UIImageEffects
 			bool hasSaturationChange = Math.Abs (saturationDeltaFactor - 1) > float.Epsilon;
 
 			if (hasBlur || hasSaturationChange) {
-				UIGraphics.BeginImageContextWithOptions (image.Size, false, screenScale);
+				UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
 				var contextIn = UIGraphics.GetCurrentContext ();
 				contextIn.ScaleCTM (1.0f, -1.0f);
 				contextIn.TranslateCTM (0, -image.Size.Height);
@@ -91,7 +93,7 @@ namespace UIImageEffects
 					BytesPerRow = effectInContext.BytesPerRow
 				};
 
-				UIGraphics.BeginImageContextWithOptions (image.Size, false, screenScale);
+				UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
 				var effectOutContext = UIGraphics.GetCurrentContext ().AsBitmapContext () as CGBitmapContext;				
 				var effectOutBuffer = new vImageBuffer () {
 					Data = effectOutContext.Data,
@@ -101,7 +103,7 @@ namespace UIImageEffects
 				};
 
 				if (hasBlur) {
-					var inputRadius = blurRadius * screenScale;
+					var inputRadius = blurRadius * currentScale;
 					uint radius = (uint)(Math.Floor (inputRadius * 3 * Math.Sqrt (2 * Math.PI) / 4 + 0.5));
 					if ((radius % 2) != 1)
 						radius += 1;
@@ -137,7 +139,7 @@ namespace UIImageEffects
 			}
 
 			// Setup up output context
-			UIGraphics.BeginImageContextWithOptions (image.Size, false, screenScale);
+			UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
 			var outputContext = UIGraphics.GetCurrentContext ();
 			outputContext.ScaleCTM (1, -1);
 			outputContext.TranslateCTM (0, -image.Size.Height);
