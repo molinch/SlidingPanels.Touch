@@ -80,88 +80,104 @@ namespace UIImageEffects
 
 			if (hasBlur || hasSaturationChange) {
 				UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
-				var contextIn = UIGraphics.GetCurrentContext ();
-				contextIn.ScaleCTM (1.0f, -1.0f);
-				contextIn.TranslateCTM (0, -image.Size.Height);
-				contextIn.DrawImage (imageRect, image.CGImage);
-				var effectInContext = contextIn.AsBitmapContext () as CGBitmapContext;
+				try {
+					using (var contextIn = UIGraphics.GetCurrentContext ()) {
+						contextIn.ScaleCTM (1.0f, -1.0f);
+						contextIn.TranslateCTM (0, -image.Size.Height);
+						contextIn.DrawImage (imageRect, image.CGImage);
 
-				var effectInBuffer = new vImageBuffer () {
-					Data = effectInContext.Data,
-					Width = effectInContext.Width,
-					Height = effectInContext.Height,
-					BytesPerRow = effectInContext.BytesPerRow
-				};
+						using (var effectInContext = contextIn.AsBitmapContext () as CGBitmapContext) {
+							var effectInBuffer = new vImageBuffer () {
+								Data = effectInContext.Data,
+								Width = effectInContext.Width,
+								Height = effectInContext.Height,
+								BytesPerRow = effectInContext.BytesPerRow
+							};
+							
+							UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
+							
+							try {
+								using (var effectOutContext = UIGraphics.GetCurrentContext ().AsBitmapContext () as CGBitmapContext) {
+									var effectOutBuffer = new vImageBuffer () {
+										Data = effectOutContext.Data,
+										Width = effectOutContext.Width,
+										Height = effectOutContext.Height,
+										BytesPerRow = effectOutContext.BytesPerRow
+									};
 
-				UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
-				var effectOutContext = UIGraphics.GetCurrentContext ().AsBitmapContext () as CGBitmapContext;				
-				var effectOutBuffer = new vImageBuffer () {
-					Data = effectOutContext.Data,
-					Width = effectOutContext.Width,
-					Height = effectOutContext.Height,
-					BytesPerRow = effectOutContext.BytesPerRow
-				};
-
-				if (hasBlur) {
-					var inputRadius = blurRadius * currentScale;
-					uint radius = (uint)(Math.Floor (inputRadius * 3 * Math.Sqrt (2 * Math.PI) / 4 + 0.5));
-					if ((radius % 2) != 1)
-						radius += 1;
-					vImage.BoxConvolveARGB8888 (ref effectInBuffer, ref effectOutBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
-					vImage.BoxConvolveARGB8888 (ref effectOutBuffer, ref effectInBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
-					vImage.BoxConvolveARGB8888 (ref effectInBuffer, ref effectOutBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
+									if (hasBlur) {
+										var inputRadius = blurRadius * currentScale;
+										uint radius = (uint)(Math.Floor (inputRadius * 3 * Math.Sqrt (2 * Math.PI) / 4 + 0.5));
+										if ((radius % 2) != 1)
+											radius += 1;
+										vImage.BoxConvolveARGB8888 (ref effectInBuffer, ref effectOutBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
+										vImage.BoxConvolveARGB8888 (ref effectOutBuffer, ref effectInBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
+										vImage.BoxConvolveARGB8888 (ref effectInBuffer, ref effectOutBuffer, IntPtr.Zero, 0, 0, radius, radius, Pixel8888.Zero, vImageFlags.EdgeExtend);
+									}
+									bool effectImageBuffersAreSwapped = false;
+									if (hasSaturationChange) {
+										var s = saturationDeltaFactor;
+										var floatingPointSaturationMatrix = new float [] {
+											0.0722f + 0.9278f * s,  0.0722f - 0.0722f * s,  0.0722f - 0.0722f * s,  0,
+											0.7152f - 0.7152f * s,  0.7152f + 0.2848f * s,  0.7152f - 0.7152f * s,  0,
+											0.2126f - 0.2126f * s,  0.2126f - 0.2126f * s,  0.2126f + 0.7873f * s,  0,
+											0,                    0,                    0,  1,
+										};
+										const int divisor = 256;
+										var saturationMatrix = new short [floatingPointSaturationMatrix.Length];
+										for (int i = 0; i < saturationMatrix.Length; i++)
+											saturationMatrix [i] = (short)Math.Round (floatingPointSaturationMatrix [i] * divisor);
+										if (hasBlur) {
+											vImage.MatrixMultiplyARGB8888 (ref effectOutBuffer, ref effectInBuffer, saturationMatrix, divisor, null, null, vImageFlags.NoFlags);
+											effectImageBuffersAreSwapped = true;
+										} else
+											vImage.MatrixMultiplyARGB8888 (ref effectInBuffer, ref effectOutBuffer, saturationMatrix, divisor, null, null, vImageFlags.NoFlags);
+									}
+									if (!effectImageBuffersAreSwapped)
+										effectImage = UIGraphics.GetImageFromCurrentImageContext ();
+								
+									if (effectImageBuffersAreSwapped)
+										effectImage = UIGraphics.GetImageFromCurrentImageContext ();
+								}
+							} finally {
+								UIGraphics.EndImageContext ();
+							}
+						}
+					}
 				}
-				bool effectImageBuffersAreSwapped = false;
-				if (hasSaturationChange) {
-					var s = saturationDeltaFactor;
-					var floatingPointSaturationMatrix = new float [] {
-						0.0722f + 0.9278f * s,  0.0722f - 0.0722f * s,  0.0722f - 0.0722f * s,  0,
-						0.7152f - 0.7152f * s,  0.7152f + 0.2848f * s,  0.7152f - 0.7152f * s,  0,
-						0.2126f - 0.2126f * s,  0.2126f - 0.2126f * s,  0.2126f + 0.7873f * s,  0,
-						0,                    0,                    0,  1,
-					};
-					const int divisor = 256;
-					var saturationMatrix = new short [floatingPointSaturationMatrix.Length];
-					for (int i = 0; i < saturationMatrix.Length; i++)
-						saturationMatrix [i] = (short)Math.Round (floatingPointSaturationMatrix [i] * divisor);
-					if (hasBlur) {
-						vImage.MatrixMultiplyARGB8888 (ref effectOutBuffer, ref effectInBuffer, saturationMatrix, divisor, null, null, vImageFlags.NoFlags);
-						effectImageBuffersAreSwapped = true;
-					} else
-						vImage.MatrixMultiplyARGB8888 (ref effectInBuffer, ref effectOutBuffer, saturationMatrix, divisor, null, null, vImageFlags.NoFlags);
+				finally {
+					UIGraphics.EndImageContext ();
 				}
-				if (!effectImageBuffersAreSwapped)
-					effectImage = UIGraphics.GetImageFromCurrentImageContext ();
-				UIGraphics.EndImageContext ();
-				if (effectImageBuffersAreSwapped)
-					effectImage = UIGraphics.GetImageFromCurrentImageContext ();
-				UIGraphics.EndImageContext ();
 			}
 
 			// Setup up output context
 			UIGraphics.BeginImageContextWithOptions (image.Size, false, currentScale);
-			var outputContext = UIGraphics.GetCurrentContext ();
-			outputContext.ScaleCTM (1, -1);
-			outputContext.TranslateCTM (0, -image.Size.Height);
+			try {
+				using (var outputContext = UIGraphics.GetCurrentContext ()) {
+					outputContext.ScaleCTM (1, -1);
+					outputContext.TranslateCTM (0, -image.Size.Height);
 
-			// Draw base image
-			if (hasBlur) {
-				outputContext.SaveState ();
-				if (maskImage != null)
-					outputContext.ClipToMask (imageRect, maskImage.CGImage);
-				outputContext.DrawImage (imageRect, effectImage.CGImage);
-				outputContext.RestoreState ();
-			}
+					// Draw base image
+					if (hasBlur) {
+						outputContext.SaveState ();
+						if (maskImage != null)
+							outputContext.ClipToMask (imageRect, maskImage.CGImage);
+						outputContext.DrawImage (imageRect, effectImage.CGImage);
+						outputContext.RestoreState ();
+					}
 
-			if (tintColor != null) {
-				outputContext.SaveState ();
-				outputContext.SetFillColor (tintColor.CGColor);
-				outputContext.FillRect (imageRect);
-				outputContext.RestoreState ();
+					if (tintColor != null) {
+						outputContext.SaveState ();
+						outputContext.SetFillColor (tintColor.CGColor);
+						outputContext.FillRect (imageRect);
+						outputContext.RestoreState ();
+					}
+					var outputImage = UIGraphics.GetImageFromCurrentImageContext ();
+					return outputImage;
+				}
+			} finally {
+				UIGraphics.EndImageContext ();
 			}
-			var outputImage = UIGraphics.GetImageFromCurrentImageContext ();
-			UIGraphics.EndImageContext ();
-			return outputImage;
 		}
 	}
 }
