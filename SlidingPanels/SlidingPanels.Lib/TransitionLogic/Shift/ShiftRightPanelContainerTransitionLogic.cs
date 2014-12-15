@@ -20,10 +20,11 @@
 /// -----------------------------------------------------------------------------
 
 using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Drawing;
 using SlidingPanels.Lib.Layouts;
 using SlidingPanels.Lib.PanelContainers;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionLogic.Shift
 {
@@ -37,12 +38,12 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// <summary>
 		/// starting X Coordinate of the top view
 		/// </summary>
-		protected float _topViewStartXPosition = 0.0f;
+		protected nfloat _topViewStartXPosition = 0.0f;
 
 		/// <summary>
 		/// X coordinate where the user touched when starting a slide operation
 		/// </summary>
-		protected float _touchPositionStartXPosition = 0.0f;
+		protected nfloat _touchPositionStartXPosition = 0.0f;
 
 		#endregion
 
@@ -52,9 +53,9 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// Gets the panel position.
 		/// </summary>
 		/// <value>The panel position.</value>
-		public override RectangleF GetPanelPosition(UIView contentView, SizeF panelSize)
+		public override CGRect GetPanelPosition(UIView contentView, CGSize panelSize)
 		{
-			return new RectangleF 
+			return new CGRect 
 			{
 				X = contentView.Bounds.Width - panelSize.Width,
 				Y = -contentView.Frame.Y,
@@ -69,7 +70,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize)
+		public override CGRect GetTopViewPositionWhenSliderIsVisible(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize)
 		{
 			topViewCurrentFrame.X = - panelSize.Width;
 			return topViewCurrentFrame;
@@ -81,7 +82,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize)
+		public override CGRect GetTopViewPositionWhenSliderIsHidden(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize)
 		{
 			topViewCurrentFrame.X = 0;
 			return topViewCurrentFrame;
@@ -100,12 +101,12 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public override bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToShowAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			return (touchPosition.X >= contentView.Bounds.Size.Width - EdgeTolerance && touchPosition.X <= contentView.Bounds.Size.Width);
 		}
 
-		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToHideAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			// TODO FMT: to be implemented...
 			return true;
@@ -116,7 +117,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override void SlidingStarted (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override void SlidingStarted (CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			_touchPositionStartXPosition = touchPosition.X;
 			_topViewStartXPosition = topViewCurrentFrame.X;
@@ -127,18 +128,18 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF Sliding (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override CGRect Sliding (CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
-			float screenWidth = contentView.Bounds.Size.Width;
-			float panelWidth = panelSize.Width;
-			float leftEdge = screenWidth - panelWidth;
-			float translation = touchPosition.X - _touchPositionStartXPosition;
+			var screenWidth = contentView.Bounds.Size.Width;
+			var panelWidth = panelSize.Width;
+			var leftEdge = screenWidth - panelWidth;
+			var translation = touchPosition.X - _touchPositionStartXPosition;
 
-			RectangleF frame = topViewCurrentFrame;
+			CGRect frame = topViewCurrentFrame;
 
 			frame.X = _topViewStartXPosition + translation;
 
-			float y = frame.X + frame.Width;
+			var y = frame.X + frame.Width;
 
 			if (y >= screenWidth) 
 			{ 
@@ -160,12 +161,12 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override bool SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingEnded (CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
-			float screenWidth = contentView.Bounds.Size.Width;
-			float panelWidth = panelSize.Width;
+			var screenWidth = contentView.Bounds.Size.Width;
+			var panelWidth = panelSize.Width;
 
-			float y = topViewCurrentFrame.X + topViewCurrentFrame.Width;
+			var y = topViewCurrentFrame.X + topViewCurrentFrame.Width;
 			return (y < (screenWidth - (panelWidth / 2)));
 		}
 

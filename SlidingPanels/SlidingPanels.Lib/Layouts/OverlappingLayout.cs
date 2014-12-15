@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using SlidingPanels.Lib.PanelContainers;
 using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using SlidingPanels.Lib.TransitionLogic;
 using SlidingPanels.Lib.TransitionLogic.Overlap;
 using SlidingPanels.Lib.TransitionLogic.Shift;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.Layouts
 {
@@ -21,17 +22,17 @@ namespace SlidingPanels.Lib.Layouts
 		protected const float AnimationSpeed = 0.25f;
 
 		#region Handle touch gestures
-		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, PointF touchPt)
+		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, CGPoint touchPt)
 		{
 			BringContainerToForeground (container);
 		}
 
-		public void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, PointF touchPt) {
-			RectangleF newFrame = container.Sliding(touchPt, slidingController.View.Frame);
+		public void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, CGPoint touchPt) {
+			CGRect newFrame = container.Sliding(touchPt, slidingController.View.Frame);
 			container.View.Frame = newFrame;
 		}
 
-		public void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, PointF touchPt) {
+		public void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, CGPoint touchPt) {
 		}
 		#endregion
 

@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EB99DC4A-6C39-4A37-8F85-452C2AC8F9BF}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>SlidingPanels</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
@@ -81,7 +81,7 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
+    <Reference Include="Xamarin.iOS" />
     <Reference Include="Cirrious.FluentLayouts.Touch">
       <HintPath>libs\Cirrious.FluentLayout\Cirrious.FluentLayouts.Touch.dll</HintPath>
     </Reference>
@@ -107,7 +107,7 @@
     <Compile Include="Panels\RightPanelViewController.cs" />
     <Compile Include="LayoutSwitch.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\SlidingPanels.Lib\SlidingPanels.Touch.csproj">
       <Project>{2FD1999D-45B1-4485-BF96-EAB061481945}</Project>

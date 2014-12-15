@@ -39,6 +39,18 @@ Global
 		{EB99DC4A-6C39-4A37-8F85-452C2AC8F9BF}.Release|iPhone.Build.0 = Release|iPhone
 		{EB99DC4A-6C39-4A37-8F85-452C2AC8F9BF}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{EB99DC4A-6C39-4A37-8F85-452C2AC8F9BF}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Debug|iPhone.Build.0 = Debug|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Release|iPhone.ActiveCfg = Release|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Release|iPhone.Build.0 = Release|iPhone
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{614377FA-7E65-47C5-B57B-C36E899B8494}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = SlidingPanels\Sliding Panels.csproj

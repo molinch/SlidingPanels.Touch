@@ -1,8 +1,9 @@
 ﻿using System;
 using SlidingPanels.Lib.PanelContainers;
 using System.Drawing;
-using MonoTouch.UIKit;
+using UIKit;
 using SlidingPanels.Lib.TransitionLogic;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.Layouts
 {
@@ -13,11 +14,11 @@ namespace SlidingPanels.Lib.Layouts
 	{
 		#region Handle touch gestures
 
-		void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, PointF touchPt);
+		void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, CGPoint touchPt);
 
-		void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, PointF touchPt);
+		void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, CGPoint touchPt);
 
-		void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, PointF touchPt);
+		void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, CGPoint touchPt);
 
 		#endregion
 

@@ -21,10 +21,11 @@
 //
 using System;
 using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using SlidingPanels.Lib;
 using Cirrious.FluentLayouts.Touch;
+using CoreGraphics;
 
 namespace SlidingPanels.Panels
 {
@@ -44,7 +45,7 @@ namespace SlidingPanels.Panels
 		{
 			base.ViewDidLoad ();
 
-			View.Frame = new RectangleF (View.Frame.Location, new SizeF (View.Frame.Width/2, View.Frame.Height));
+			View.Frame = new CGRect (View.Frame.Location, new CGSize (View.Frame.Width/2, View.Frame.Height));
 
 			var info = new UILabel () {
 				Text = "This is the right panel",

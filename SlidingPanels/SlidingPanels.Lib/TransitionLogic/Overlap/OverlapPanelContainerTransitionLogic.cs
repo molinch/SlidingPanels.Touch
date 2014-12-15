@@ -1,9 +1,10 @@
 ﻿using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Drawing;
 using System.Linq;
 using SlidingPanels.Lib.PanelContainers;
 using SlidingPanels.Lib.Tools;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionLogic.Overlap
 {
@@ -44,7 +45,7 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 
 		public override void ResizeContainer (PanelContainer container)
 		{
-			container.View.Frame = new RectangleF (container.View.Frame.Location.X, 0, container.Size.Width, WindowState.CurrentScreenHeight);
+			container.View.Frame = new CGRect (container.View.Frame.Location.X, 0, container.Size.Width, WindowState.CurrentScreenHeight);
 			container.PanelVC.View.Frame = GetPanelPosition(container.View, container.Size);
 		}
 

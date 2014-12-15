@@ -21,12 +21,13 @@
 
 using System;
 using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 using SlidingPanels.Lib;
 using SlidingPanels.Lib.PanelContainers;
 using SlidingPanels.Panels;
 using Cirrious.FluentLayouts.Touch;
+using CoreGraphics;
 
 namespace SlidingPanels
 {
@@ -40,7 +41,7 @@ namespace SlidingPanels
 
 		private UIBarButtonItem CreateSliderButton(string imageName, PanelType panelType)
 		{
-			var button = new UIButton(new RectangleF(0, 0, 40f, 40f));
+			var button = new UIButton(new CGRect(0, 0, 40f, 40f));
 			button.SetBackgroundImage(UIImage.FromBundle(imageName), UIControlState.Normal);
 			button.TouchUpInside += delegate
 			{

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using MonoTouch.UIKit;
+using UIKit;
 using SlidingPanels.Lib.TransitionEffects;
 using SlidingPanels.Lib.PanelContainers;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
@@ -28,7 +29,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public override CGRect GetTopViewPositionWhenSliderIsHidden(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			return transitionLogic.GetTopViewPositionWhenSliderIsHidden(containerViewFrame, topViewCurrentFrame, panelSize);
 		}
 
@@ -38,7 +39,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public override CGRect GetTopViewPositionWhenSliderIsVisible(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			return transitionLogic.GetTopViewPositionWhenSliderIsVisible(containerViewFrame, topViewCurrentFrame, panelSize);
 		}
 
@@ -48,7 +49,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetContainerViewPositionWhenSliderIsHidden(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public override CGRect GetContainerViewPositionWhenSliderIsHidden(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			return transitionLogic.GetContainerViewPositionWhenSliderIsHidden(containerViewFrame, topViewCurrentFrame, panelSize);
 		}
 
@@ -58,7 +59,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF GetContainerViewPositionWhenSliderIsVisible(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public override CGRect GetContainerViewPositionWhenSliderIsVisible(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			return transitionLogic.GetContainerViewPositionWhenSliderIsVisible(containerViewFrame, topViewCurrentFrame, panelSize);
 		}
 
@@ -66,7 +67,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// Gets the panel position.
 		/// </summary>
 		/// <value>The panel position.</value>
-		public override RectangleF GetPanelPosition(UIView contentView, SizeF panelSize) {
+		public override CGRect GetPanelPosition(UIView contentView, CGSize panelSize) {
 			return transitionLogic.GetPanelPosition(contentView, panelSize);
 		}
 
@@ -83,12 +84,12 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public override bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToShowAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			return transitionLogic.SlidingToShowAllowed(touchPosition, topViewCurrentFrame, contentView, panelSize);
 		}
 
-		public override bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingToHideAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			return transitionLogic.SlidingToHideAllowed(touchPosition, topViewCurrentFrame, contentView, panelSize);
 		}
@@ -98,7 +99,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override void SlidingStarted(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			effect.SlidingStarted(touchPosition, topViewCurrentFrame);
 			transitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, contentView, panelSize);
@@ -109,7 +110,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override CGRect Sliding(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			var newFrame = transitionLogic.Sliding(touchPosition, topViewCurrentFrame, contentView, panelSize);
 			effect.Sliding(touchPosition, topViewCurrentFrame, newFrame);
@@ -123,7 +124,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public override bool SlidingEnded(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize)
+		public override bool SlidingEnded(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize)
 		{
 			bool ended = transitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, contentView, panelSize);
 			effect.SlidingEnded(touchPosition, topViewCurrentFrame, ended);

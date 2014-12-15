@@ -20,11 +20,12 @@
 /// -----------------------------------------------------------------------------
 
 using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Drawing;
 using SlidingPanels.Lib.Layouts;
 using SlidingPanels.Lib.TransitionLogic;
 using SlidingPanels.Lib.TransitionEffects;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.PanelContainers
 {
@@ -78,7 +79,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// Gets the size of the panel
         /// </summary>
         /// <value>The size.</value>
-        public virtual SizeF Size { 
+        public virtual CGSize Size { 
             get; 
             private set; 
         }
@@ -234,7 +235,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			TransitionLogic.Hide(this);
         }
 
-		public virtual bool CanStartSliding(PointF touchPosition, RectangleF topViewCurrentFrame) {
+		public virtual bool CanStartSliding(CGPoint touchPosition, CGRect topViewCurrentFrame) {
 			if (!SlidingAllowed)
 				return false;
 
@@ -256,7 +257,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF topViewCurrentFrame) {
+		public CGRect GetTopViewPositionWhenSliderIsHidden(CGRect topViewCurrentFrame) {
 			return TransitionLogic.GetTopViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
 		}
 
@@ -266,7 +267,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame) {
+		public CGRect GetTopViewPositionWhenSliderIsVisible(CGRect topViewCurrentFrame) {
 			return TransitionLogic.GetTopViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
 		}
 
@@ -276,7 +277,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF GetContainerViewPositionWhenSliderIsHidden(RectangleF topViewCurrentFrame) {
+		public CGRect GetContainerViewPositionWhenSliderIsHidden(CGRect topViewCurrentFrame) {
 			return TransitionLogic.GetContainerViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
 		}
 
@@ -286,7 +287,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF GetContainerViewPositionWhenSliderIsVisible(RectangleF topViewCurrentFrame) {
+		public CGRect GetContainerViewPositionWhenSliderIsVisible(CGRect topViewCurrentFrame) {
 			return TransitionLogic.GetContainerViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
 		}
 
@@ -299,7 +300,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public void SlidingStarted (PointF touchPosition, RectangleF topViewCurrentFrame) {
+		public void SlidingStarted (CGPoint touchPosition, CGRect topViewCurrentFrame) {
 			TransitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, View, Size);
 		}
 
@@ -308,7 +309,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// </summary>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF Sliding (PointF touchPosition, RectangleF topViewCurrentFrame) {
+		public CGRect Sliding (CGPoint touchPosition, CGRect topViewCurrentFrame) {
 			return TransitionLogic.Sliding(touchPosition, topViewCurrentFrame, View, Size);
 		}
 
@@ -318,7 +319,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <returns><c>true</c>, if sliding has ended, <c>false</c> otherwise.</returns>
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public bool SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame) {
+		public bool SlidingEnded (CGPoint touchPosition, CGRect topViewCurrentFrame) {
 			return TransitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, View, Size);
 		}
 

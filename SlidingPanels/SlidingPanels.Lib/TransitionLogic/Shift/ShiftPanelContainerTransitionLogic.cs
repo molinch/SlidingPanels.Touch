@@ -1,5 +1,5 @@
 ﻿using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Drawing;
 using SlidingPanels.Lib.PanelContainers;
 

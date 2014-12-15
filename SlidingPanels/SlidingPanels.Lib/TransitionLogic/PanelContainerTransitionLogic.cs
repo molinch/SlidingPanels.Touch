@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using MonoTouch.UIKit;
+using UIKit;
 using SlidingPanels.Lib.PanelContainers;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionLogic
 {
@@ -45,7 +46,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public virtual RectangleF GetTopViewPositionWhenSliderIsHidden(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public virtual CGRect GetTopViewPositionWhenSliderIsHidden(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			throw new NotImplementedException("Implement the method in your child class if this position is needed.");
 		}
 
@@ -55,7 +56,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public virtual RectangleF GetTopViewPositionWhenSliderIsVisible(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public virtual CGRect GetTopViewPositionWhenSliderIsVisible(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			throw new NotImplementedException("Implement the method in your child class if this position is needed.");
 		}
 
@@ -65,7 +66,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public virtual RectangleF GetContainerViewPositionWhenSliderIsHidden(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public virtual CGRect GetContainerViewPositionWhenSliderIsHidden(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			throw new NotImplementedException("Implement the method in your child class if this position is needed.");
 		}
 
@@ -75,7 +76,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// </summary>
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public virtual RectangleF GetContainerViewPositionWhenSliderIsVisible(RectangleF containerViewFrame, RectangleF topViewCurrentFrame, SizeF panelSize) {
+		public virtual CGRect GetContainerViewPositionWhenSliderIsVisible(CGRect containerViewFrame, CGRect topViewCurrentFrame, CGSize panelSize) {
 			throw new NotImplementedException("Implement the method in your child class if this position is needed.");
 		}
 
@@ -83,13 +84,13 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// Gets the panel position.
 		/// </summary>
 		/// <value>The panel position.</value>
-		public abstract RectangleF GetPanelPosition(UIView contentView, SizeF panelSize);
+		public abstract CGRect GetPanelPosition(UIView contentView, CGSize panelSize);
 
 		#endregion
 
 		#region Sliding Methods
 
-		public abstract bool SlidingToHideAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract bool SlidingToHideAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize);
 
 		/// <summary>
 		/// Determines whether this instance can start sliding given the touch position and the 
@@ -100,21 +101,21 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view's current frame.</param>
-		public abstract bool SlidingToShowAllowed(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract bool SlidingToShowAllowed(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize);
 
 		/// <summary>
 		/// Called when sliding has started on this Panel
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public abstract void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract void SlidingStarted(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize);
 
 		/// <summary>
 		/// Called while the user is sliding this Panel
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public abstract RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract CGRect Sliding(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize);
 
 		/// <summary>
 		/// Determines if a slide is complete
@@ -123,7 +124,7 @@ namespace SlidingPanels.Lib.TransitionLogic
 		/// <c>false</c>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public abstract bool SlidingEnded(PointF touchPosition, RectangleF topViewCurrentFrame, UIView contentView, SizeF panelSize);
+		public abstract bool SlidingEnded(CGPoint touchPosition, CGRect topViewCurrentFrame, UIView contentView, CGSize panelSize);
 
 		#endregion
 

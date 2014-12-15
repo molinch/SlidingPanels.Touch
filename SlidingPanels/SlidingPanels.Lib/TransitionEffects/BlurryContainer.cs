@@ -1,12 +1,13 @@
 ﻿using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Linq;
 using SlidingPanels.Lib.Tools;
 using UIImageEffects;
 using System.Drawing;
 using SlidingPanels.Lib.PanelContainers;
 using System.Threading.Tasks;
-using MonoTouch.CoreFoundation;
+using CoreFoundation;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
@@ -29,10 +30,10 @@ namespace SlidingPanels.Lib.TransitionEffects
 		{
 			this.slidingController = slidingController;
 
-			backgroundShifter = new UIView(new RectangleF(new PointF(0, 0), container.View.Frame.Size)) {
+			backgroundShifter = new UIView(new CGRect(new CGPoint(0, 0), container.View.Frame.Size)) {
 				Opaque = true
 			};
-			blurryBackground = new UIImageView(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight)) {
+			blurryBackground = new UIImageView(new CGRect(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight)) {
 				Opaque = true
 			};
 			backgroundShifter.Add(blurryBackground);
@@ -51,7 +52,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 
 			GenerateTranslucency ();
 
-			var resetFrame = new RectangleF (
+			var resetFrame = new CGRect (
 				0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
 			);
 			blurryBackground.Frame = resetFrame;
@@ -59,7 +60,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 			backgroundShifter.Frame = GetBackgroundShifterEndFrame (resetFrame); // FMT: we are supposed to pass topViewCurrentFrame here :/
 		}
 
-		public void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame)
+		public void SlidingStarted(CGPoint touchPosition, CGRect topViewCurrentFrame)
 		{
 		}
 
@@ -68,10 +69,10 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, RectangleF containerNewFrame)
+		public CGRect Sliding(CGPoint touchPosition, CGRect topViewCurrentFrame, CGRect containerNewFrame)
 		{
 			if (HasBackground) {
-				backgroundShifter.Frame = new RectangleF(
+				backgroundShifter.Frame = new CGRect(
 					0 - containerNewFrame.X, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
 				);
 			}
@@ -85,16 +86,16 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// <returns><c>true</c>, if sliding has ended, <c>false</c> otherwise.</returns>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		public void SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame, bool showing) {
+		public void SlidingEnded (CGPoint touchPosition, CGRect topViewCurrentFrame, bool showing) {
 			if (!HasBackground || !showing)
 				return;
 
 			backgroundShifter.Frame = GetBackgroundShifterEndFrame (topViewCurrentFrame);
 		}
 
-		private RectangleF GetBackgroundShifterEndFrame(RectangleF topViewCurrentFrame) {
+		private CGRect GetBackgroundShifterEndFrame(CGRect topViewCurrentFrame) {
 			bool isLeftPanel = container.PanelType == PanelType.LeftPanel;
-			return new RectangleF(
+			return new CGRect(
 				isLeftPanel ? 0 : (0 - topViewCurrentFrame.Width + container.Size.Width),
 				0,
 				WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight
@@ -110,8 +111,8 @@ namespace SlidingPanels.Lib.TransitionEffects
 			var view = displayedController.View;
 
 			DispatchQueue.MainQueue.DispatchAsync(() => {
-				var viewBackground = view.MakeSnapShot(new RectangleF(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
-				float screenScale = UIScreen.MainScreen.Scale;
+				var viewBackground = view.MakeSnapShot(new CGRect(0, 0, WindowState.CurrentScreenWidth, WindowState.CurrentScreenHeight));
+				var screenScale = UIScreen.MainScreen.Scale;
 				DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Low).DispatchAsync(() => {
 					UIImage blurredImage = viewBackground.ApplyLightEffect();
 					DispatchQueue.MainQueue.DispatchAsync(() => blurryBackground.Image = blurredImage);

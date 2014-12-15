@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using MonoTouch.UIKit;
+using UIKit;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionEffects
 {
@@ -13,14 +14,14 @@ namespace SlidingPanels.Lib.TransitionEffects
 
 		void ShowContainer();
 
-		void SlidingStarted(PointF touchPosition, RectangleF topViewCurrentFrame);
+		void SlidingStarted(CGPoint touchPosition, CGRect topViewCurrentFrame);
 
 		/// <summary>
 		/// Called while the user is sliding this Panel
 		/// </summary>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		RectangleF Sliding(PointF touchPosition, RectangleF topViewCurrentFrame, RectangleF containerNewFrame);
+		CGRect Sliding(CGPoint touchPosition, CGRect topViewCurrentFrame, CGRect containerNewFrame);
 
 		/// <summary>
 		/// Determines if a slide is complete
@@ -28,7 +29,7 @@ namespace SlidingPanels.Lib.TransitionEffects
 		/// <returns><c>true</c>, if sliding has ended, <c>false</c> otherwise.</returns>
 		/// <param name="touchPosition">Touch position.</param>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
-		void SlidingEnded (PointF touchPosition, RectangleF topViewCurrentFrame, bool showing);
+		void SlidingEnded (CGPoint touchPosition, CGRect topViewCurrentFrame, bool showing);
 	}
 }
 

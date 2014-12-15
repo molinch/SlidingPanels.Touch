@@ -20,9 +20,10 @@
 // /// -----------------------------------------------------------------------------
 //
 using System;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Drawing;
 using System.Linq;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.Tools
 {
@@ -51,11 +52,11 @@ namespace SlidingPanels.Lib.Tools
 		/// Gives the real current window width which takes care of the current orientation.
 		/// </summary>
 		/// <value>Real current window width which takes care of the current orientation.</value>
-		public static float CurrentScreenWidth {
+		public static nfloat CurrentScreenWidth {
 			get {
 				if (IsLandscapeOrientation)
-					return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
-				return Math.Min(Window.Bounds.Width, Window.Bounds.Height);
+					return (nfloat)Math.Max(Window.Bounds.Width, Window.Bounds.Height);
+				return (nfloat)Math.Min(Window.Bounds.Width, Window.Bounds.Height);
 			}
 		}
 
@@ -63,17 +64,17 @@ namespace SlidingPanels.Lib.Tools
 		/// Gives the real current window height which takes care of the current orientation.
 		/// </summary>
 		/// <value>Real current window height which takes care of the current orientation.</value>
-		public static float CurrentScreenHeight {
+		public static nfloat CurrentScreenHeight {
 			get {
 				if (IsLandscapeOrientation)
-					return Math.Min (Window.Bounds.Width, Window.Bounds.Height);
-				return Math.Max(Window.Bounds.Width, Window.Bounds.Height);
+					return (nfloat)Math.Min (Window.Bounds.Width, Window.Bounds.Height);
+				return (nfloat)Math.Max(Window.Bounds.Width, Window.Bounds.Height);
 			}
 		}
 
-		public static RectangleF CurrentScreenFrame {
+		public static CGRect CurrentScreenFrame {
 			get {
-				return new RectangleF (0, 0, CurrentScreenWidth, CurrentScreenHeight);
+				return new CGRect (0, 0, CurrentScreenWidth, CurrentScreenHeight);
 			}
 		}
 	}

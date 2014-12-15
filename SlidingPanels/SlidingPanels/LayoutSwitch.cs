@@ -22,7 +22,7 @@
 using System;
 using SlidingPanels.Lib.Layouts;
 using SlidingPanels.Lib;
-using MonoTouch.UIKit;
+using UIKit;
 using SlidingPanels.Lib.PanelContainers;
 using SlidingPanels.Panels;
 using SlidingPanels.Lib.TransitionEffects;

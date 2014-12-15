@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using SlidingPanels.Lib.PanelContainers;
 using System.Drawing;
-using MonoTouch.UIKit;
+using UIKit;
 using SlidingPanels.Lib.TransitionLogic;
 using SlidingPanels.Lib.TransitionLogic.Shift;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.Layouts
 {
@@ -23,15 +24,15 @@ namespace SlidingPanels.Lib.Layouts
 		#endregion
 
 		#region Handle touch gestures
-		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, PointF touchPt) {
+		public void SlidingGestureBegan(UIViewController slidingController, PanelContainer container, CGPoint touchPt) {
 		}
 
-		public void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, PointF touchPt) {
-			RectangleF newFrame = container.Sliding (touchPt, slidingController.View.Frame);
+		public void SlidingGestureMoved(UIViewController slidingController, PanelContainer container, CGPoint touchPt) {
+			CGRect newFrame = container.Sliding (touchPt, slidingController.View.Frame);
 			slidingController.View.Frame = newFrame;
 		}
 
-		public void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, PointF touchPt) {
+		public void SlidingGestureEnded(UIViewController slidingController, PanelContainer container, CGPoint touchPt) {
 		}
 		#endregion
 
@@ -62,7 +63,7 @@ namespace SlidingPanels.Lib.Layouts
 
 		public void WhenPanelStartsShowing(PanelContainer container, UIInterfaceOrientation orientation)
 		{
-			RectangleF frame = UIScreen.MainScreen.Bounds;
+			CGRect frame = UIScreen.MainScreen.Bounds;
 
 			if (orientation != UIInterfaceOrientation.Portrait) {
 				frame.Width = UIScreen.MainScreen.Bounds.Height;
