@@ -162,14 +162,14 @@ namespace SlidingPanels.Lib.TransitionLogic
 			}
 		}
 
-		public override void ResizeContainer (PanelContainer container)
+		public override void ResizeContainer (PanelContainer container, CGSize screenSize)
 		{
-			transitionLogic.ResizeContainer (container);
+			transitionLogic.ResizeContainer (container, screenSize);
 		}
 
-		public override void RotateContainer (PanelContainer container)
+		public override void RotateContainer (PanelContainer container, CGSize screenSize)
 		{
-			transitionLogic.RotateContainer (container);
+			transitionLogic.RotateContainer (container, screenSize);
 		}
 	}
 }

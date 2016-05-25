@@ -26,6 +26,7 @@ using SlidingPanels.Lib.Layouts;
 using SlidingPanels.Lib.TransitionLogic;
 using SlidingPanels.Lib.TransitionEffects;
 using CoreGraphics;
+using SlidingPanels.Lib.Tools;
 
 namespace SlidingPanels.Lib.PanelContainers
 {
@@ -152,7 +153,7 @@ namespace SlidingPanels.Lib.PanelContainers
             View.AddSubview (PanelVC.View);
 
             Hide ();
-			TransitionLogic.ResizeContainer(this);
+			TransitionLogic.ResizeContainer(this, WindowState.CurrentScreenFrame.Size);
         }
 
         /// <summary>
@@ -164,7 +165,7 @@ namespace SlidingPanels.Lib.PanelContainers
 			Layout.WhenPanelStartsShowing(this, InterfaceOrientation);
             PanelVC.ViewWillAppear (animated);
             base.ViewWillAppear (animated);
-			TransitionLogic.ResizeContainer(this);
+			TransitionLogic.ResizeContainer(this, WindowState.CurrentScreenFrame.Size);
         }
 
         /// <summary>
@@ -197,10 +198,10 @@ namespace SlidingPanels.Lib.PanelContainers
             base.ViewDidDisappear (animated);
         }
 
-		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
-		{
-			base.DidRotate (fromInterfaceOrientation);
-			TransitionLogic.RotateContainer (this);
+		public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            base.ViewWillTransitionToSize(toSize, coordinator);
+			TransitionLogic.RotateContainer(this, toSize);
 		}
 
         #endregion
@@ -240,11 +241,11 @@ namespace SlidingPanels.Lib.PanelContainers
 				return false;
 
 			if (IsVisible) {
-				if (TransitionLogic.SlidingToHideAllowed(touchPosition, topViewCurrentFrame, View, Size))
+				if (TransitionLogic.SlidingToHideAllowed(touchPosition, topViewCurrentFrame, View, MaxPossibleSize))
 					return topViewCurrentFrame.Contains(touchPosition);
 			}
 
-			return TransitionLogic.SlidingToShowAllowed(touchPosition, topViewCurrentFrame, View, Size);
+			return TransitionLogic.SlidingToShowAllowed(touchPosition, topViewCurrentFrame, View, MaxPossibleSize);
 		}
 
         #endregion
@@ -258,7 +259,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public CGRect GetTopViewPositionWhenSliderIsHidden(CGRect topViewCurrentFrame) {
-			return TransitionLogic.GetTopViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
+			return TransitionLogic.GetTopViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, MaxPossibleSize);
 		}
 
 		/// <summary>
@@ -268,7 +269,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <returns>The top view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public CGRect GetTopViewPositionWhenSliderIsVisible(CGRect topViewCurrentFrame) {
-			return TransitionLogic.GetTopViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
+			return TransitionLogic.GetTopViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, MaxPossibleSize);
 		}
 
 		/// <summary>
@@ -278,7 +279,7 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public CGRect GetContainerViewPositionWhenSliderIsHidden(CGRect topViewCurrentFrame) {
-			return TransitionLogic.GetContainerViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, Size);
+			return TransitionLogic.GetContainerViewPositionWhenSliderIsHidden(View.Frame, topViewCurrentFrame, MaxPossibleSize);
 		}
 
 		/// <summary>
@@ -288,8 +289,16 @@ namespace SlidingPanels.Lib.PanelContainers
 		/// <returns>The container view position when slider is visible.</returns>
 		/// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public CGRect GetContainerViewPositionWhenSliderIsVisible(CGRect topViewCurrentFrame) {
-			return TransitionLogic.GetContainerViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, Size);
+			return TransitionLogic.GetContainerViewPositionWhenSliderIsVisible(View.Frame, topViewCurrentFrame, MaxPossibleSize);
 		}
+
+        private CGSize MaxPossibleSize
+        {
+            get
+            {
+                return new CGSize(Math.Min(WindowState.CurrentScreenWidth, Size.Width), Math.Min(WindowState.CurrentScreenHeight, Size.Height));
+            }
+        }
 
 		#endregion
 
@@ -301,7 +310,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public void SlidingStarted (CGPoint touchPosition, CGRect topViewCurrentFrame) {
-			TransitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, View, Size);
+			TransitionLogic.SlidingStarted(touchPosition, topViewCurrentFrame, View, MaxPossibleSize);
 		}
 
         /// <summary>
@@ -310,7 +319,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public CGRect Sliding (CGPoint touchPosition, CGRect topViewCurrentFrame) {
-			return TransitionLogic.Sliding(touchPosition, topViewCurrentFrame, View, Size);
+			return TransitionLogic.Sliding(touchPosition, topViewCurrentFrame, View, MaxPossibleSize);
 		}
 
         /// <summary>
@@ -320,7 +329,7 @@ namespace SlidingPanels.Lib.PanelContainers
         /// <param name="touchPosition">Touch position.</param>
         /// <param name="topViewCurrentFrame">Top view current frame.</param>
 		public bool SlidingEnded (CGPoint touchPosition, CGRect topViewCurrentFrame) {
-			return TransitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, View, Size);
+			return TransitionLogic.SlidingEnded(touchPosition, topViewCurrentFrame, View, MaxPossibleSize);
 		}
 
         #endregion

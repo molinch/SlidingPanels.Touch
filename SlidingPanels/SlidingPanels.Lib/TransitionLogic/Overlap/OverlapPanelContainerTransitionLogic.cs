@@ -43,16 +43,17 @@ namespace SlidingPanels.Lib.TransitionLogic.Overlap
 			}
 		}
 
-		public override void ResizeContainer (PanelContainer container)
+        public override void ResizeContainer (PanelContainer container, CGSize screenSize)
 		{
-			container.View.Frame = new CGRect (container.View.Frame.Location.X, 0, container.Size.Width, WindowState.CurrentScreenHeight);
-			container.PanelVC.View.Frame = GetPanelPosition(container.View, container.Size);
+            var width = Math.Min(container.Size.Width, screenSize.Width);
+            container.View.Frame = new CGRect (container.View.Frame.Location.X, 0, width, screenSize.Height);
+            container.PanelVC.View.Frame = GetPanelPosition(container.View, new CGSize(width, screenSize.Height));
 		}
 
-		public override void RotateContainer (PanelContainer container)
+        public override void RotateContainer (PanelContainer container, CGSize screenSize)
 		{
 			Hide(container); // FMT: currently when we rotate it's really messy so to be easier panels are temporarly hidden
-			ResizeContainer(container);
+			ResizeContainer(container, screenSize);
 		}
 	}
 }

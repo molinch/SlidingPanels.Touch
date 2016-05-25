@@ -2,6 +2,7 @@
 using UIKit;
 using System.Drawing;
 using SlidingPanels.Lib.PanelContainers;
+using CoreGraphics;
 
 namespace SlidingPanels.Lib.TransitionLogic.Shift
 {
@@ -26,14 +27,14 @@ namespace SlidingPanels.Lib.TransitionLogic.Shift
 			container.View.Hidden = true;
 		}
 
-		public override void ResizeContainer (PanelContainer container)
+		public override void ResizeContainer (PanelContainer container, CGSize screenSize)
 		{
 			container.PanelVC.View.Frame = this.GetPanelPosition(container.View, container.Size);
 		}
 
-		public override void RotateContainer (PanelContainer container)
+		public override void RotateContainer (PanelContainer container, CGSize screenSize)
 		{
-			ResizeContainer(container);
+			ResizeContainer(container, screenSize);
 		}
 	}
 }

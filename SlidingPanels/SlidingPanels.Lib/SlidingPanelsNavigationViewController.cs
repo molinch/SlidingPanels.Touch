@@ -218,11 +218,10 @@ namespace SlidingPanels.Lib
         ///     Called after the view rotated
         ///     This override forwards the DidRotate callback on to each of the panel containers
         /// </summary>
-        /// <param name="fromInterfaceOrientation">From interface orientation.</param>
-        public override void DidRotate(UIInterfaceOrientation fromInterfaceOrientation)
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-            base.DidRotate(fromInterfaceOrientation);
-            _panelContainers.ForEach(c => c.DidRotate(fromInterfaceOrientation));
+            base.ViewWillTransitionToSize(toSize, coordinator);
+            _panelContainers.ForEach(c => c.ViewWillTransitionToSize(toSize, coordinator));
         }
 
         #endregion

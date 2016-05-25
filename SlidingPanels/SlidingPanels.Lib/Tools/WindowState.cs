@@ -54,9 +54,7 @@ namespace SlidingPanels.Lib.Tools
 		/// <value>Real current window width which takes care of the current orientation.</value>
 		public static nfloat CurrentScreenWidth {
 			get {
-				if (IsLandscapeOrientation)
-					return (nfloat)Math.Max(Window.Bounds.Width, Window.Bounds.Height);
-				return (nfloat)Math.Min(Window.Bounds.Width, Window.Bounds.Height);
+                return Window.Bounds.Width;
 			}
 		}
 
@@ -66,9 +64,7 @@ namespace SlidingPanels.Lib.Tools
 		/// <value>Real current window height which takes care of the current orientation.</value>
 		public static nfloat CurrentScreenHeight {
 			get {
-				if (IsLandscapeOrientation)
-					return (nfloat)Math.Min (Window.Bounds.Width, Window.Bounds.Height);
-				return (nfloat)Math.Max(Window.Bounds.Width, Window.Bounds.Height);
+                return Window.Bounds.Height;
 			}
 		}
 
